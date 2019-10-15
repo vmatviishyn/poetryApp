@@ -1,6 +1,7 @@
 import { Component, OnInit, HostListener, Inject } from '@angular/core';
 import { trigger, state, transition, style, animate } from '@angular/animations';
 import { DOCUMENT } from '@angular/common';
+import { PoemsService } from 'src/app/services/poems.service';
 
 
 @Component({
@@ -18,10 +19,15 @@ import { DOCUMENT } from '@angular/common';
   ],
 })
 export class PoemsComponent implements OnInit {
+  poems: any;
 
-  constructor(@Inject(DOCUMENT) document) { }
+  constructor(
+    @Inject(DOCUMENT) document,
+    private poemsService: PoemsService
+  ) { }
 
   ngOnInit() {
+    this.getPoems();
   }
 
   @HostListener('window:scroll', ['$event'])
@@ -33,5 +39,18 @@ export class PoemsComponent implements OnInit {
       const element = document.getElementById('header');
       element.classList.remove('sticky');
      }
+  }
+
+  getPoems() {
+    this.poemsService.getPoems()
+      .subscribe(data => {
+        this.poems = data;
+      });
+  }
+
+  onAddPoem(text) {
+    this.poemsService.addPoem({
+      poemText: text
+    });
   }
 }

@@ -1,41 +1,17 @@
 <div id="poems" class="poems" (scroll)="onWindowScroll($event);">
 
-  <mat-card class="poem">
+  <mat-card class="poem" *ngFor="let poem of poems">
     <img mat-card-image src="/assets/images/post1.jpg" alt="Photo of a Shiba Inu">
     <mat-card-content>
-      <pre class="poem--text">
-ти говори.
-балакай.
-не мовчи.
-промов.
-ти розкажи про те, як закипає в серці кров.
-кричи.
-кричи, коли не в змозі більш мовчати.
-скажи, коли не знаєш що сказати.
-ти говори, бодай ніхто й не чує.
-і смійся.
-смійся так, щоб кожен бачив.
-сповита у дощі і сірі будні,
-у осінь й тютюновий дим.
-в очах нехай завжди палають,
-жнива твої жовтогарячі.
-і будь п'янка.
-й спалахуй від іскри.
-і будь моя.
-моя жадана жінко.
-моя м'яка роса.
-і моя люба леле.
-я вбережу тебе.
-і закарбую.
-і ароматом твоїм
-сповню кожну квітку.
-люблю.
-кохаю.
-й плекаю уві сні.
-і підпис у кінці:
-*твоїм навік я буду*.
-      </pre>
+      <p class="poem--text">
+        {{ poem.poemText.trim()}}
+      </p>
     </mat-card-content>
   </mat-card>
 
+</div>
+
+<div>
+  <textarea cols="30" rows="10" #inputValue></textarea>
+  <button (click)="onAddPoem(inputValue.value)">Add poem</button>
 </div>
