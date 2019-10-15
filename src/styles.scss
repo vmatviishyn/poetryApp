@@ -1,1 +1,24 @@
 /* You can add global styles to this file, and also import other style files */
+
+html, body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.sticky {
+  background: white;
+  box-shadow: 0 3px 12px 0 rgba(0, 0, 0, 0.08);
+  position: fixed;
+  top: 0;
+  height: 56;
+  width: 100%;
+  z-index: 1;
+  transition: .6s;
+
+  .mat-toolbar {
+    color: black !important;
+  }
+}
