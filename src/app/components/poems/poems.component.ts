@@ -32,13 +32,14 @@ export class PoemsComponent implements OnInit {
 
   @HostListener('window:scroll', ['$event'])
   onWindowScroll(e) {
-     if (window.pageYOffset > 144) {
+    console.log('sdv');
+    if (window.pageYOffset > 144) {
       const element = document.getElementById('header');
       element.classList.add('sticky');
-     } else {
+    } else {
       const element = document.getElementById('header');
       element.classList.remove('sticky');
-     }
+    }
   }
 
   getPoems() {
@@ -46,11 +47,5 @@ export class PoemsComponent implements OnInit {
       .subscribe(data => {
         this.poems = data;
       });
-  }
-
-  onAddPoem(text) {
-    this.poemsService.addPoem({
-      poemText: text
-    });
   }
 }

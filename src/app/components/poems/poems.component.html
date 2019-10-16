@@ -1,5 +1,4 @@
 <div id="poems" class="poems" (scroll)="onWindowScroll($event);">
-
   <mat-card class="poem" *ngFor="let poem of poems">
     <img mat-card-image src="/assets/images/post1.jpg" alt="Photo of a Shiba Inu">
     <mat-card-content>
@@ -8,10 +7,4 @@
       </p>
     </mat-card-content>
   </mat-card>
-
-</div>
-
-<div>
-  <textarea cols="30" rows="10" #inputValue></textarea>
-  <button (click)="onAddPoem(inputValue.value)">Add poem</button>
 </div>

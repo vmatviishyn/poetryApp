@@ -1,3 +1,33 @@
-<app-banner></app-banner>
+<mat-sidenav-container
+  class="example-container"
+  (backdropClick)="sidenav.close()">
+  <mat-sidenav #sidenav (keydown.escape)="sidenav.close()" disableClose>
+    <button mat-raised-button (click)="onAddNewPoemDialogOpen()">Add new poem</button><br>
+    <button mat-raised-button (click)="login()">Login</button><br>
+    <button mat-raised-button (click)="logout()">Logout</button>
+  </mat-sidenav>
 
-<app-poems></app-poems>
+  <mat-sidenav-content>
+
+    <div class="hero-image">
+      <div class="animated fadeInDown" id="header">
+        <mat-toolbar color="primary">
+          <mat-icon class="example-icon" aria-hidden="false" (click)="sidenav.open()">menu</mat-icon>
+          <span class="example-spacer"></span>
+          <span>My Poetry</span>
+        </mat-toolbar>
+      </div>
+
+      <div class="hero-text">
+        <div>
+          <p class="hero-text--primary">Hi</p>
+          <p class="hero-text--secondary">I write poetry</p>
+        </div>
+        <button (click)="scroll()">Start reading</button>
+      </div>
+    </div>
+
+    <app-poems></app-poems>
+
+  </mat-sidenav-content>
+</mat-sidenav-container>
