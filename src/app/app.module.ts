@@ -12,12 +12,14 @@ import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { NewPoemComponent } from './components/new-poem/new-poem.component';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { BottomSheetComponent } from './components/new-poem/bottom-sheet/bottom-sheet.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     PoemsComponent,
     NewPoemComponent,
+    BottomSheetComponent,
   ],
   imports: [
     BrowserModule,
@@ -33,6 +35,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
   ],
   entryComponents: [
     NewPoemComponent,
+    BottomSheetComponent,
   ],
   bootstrap: [AppComponent]
 })
