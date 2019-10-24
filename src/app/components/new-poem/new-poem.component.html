@@ -1,5 +1,36 @@
+<mat-card class="poem">
+  <mat-card-header>
+    <label
+      matRipple
+      [matRippleCentered]="centered"
+      [matRippleDisabled]="disabled"
+      [matRippleUnbounded]="unbounded"
+      [matRippleRadius]="radius"
+      [matRippleColor]="color"
+      for="upload"
+      class="upload-label example-ripple-container">
+        <mat-icon aria-hidden="false">photo_camera</mat-icon>
+        <span>
+          Add a Photo
+        </span>
+    </label>
+    <input
+      id="upload"
+      type="file"
+      (change)="onFileChanges($event)"
+    />
+  </mat-card-header>
 
-<button mat-raised-button (click)="openBottomSheet()">Choose photo</button>
+  <img *ngIf="url" class="image-preview" [src]="url" alt="">
 
-<textarea name="" id="" cols="30" rows="10" #test></textarea>
-<button mat-raised-button (click)="onAddNewPoem(test.value)">test</button>
+  <mat-card-content>
+    <textarea name="" id="" cols="30" rows="10" #test></textarea>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <button mat-button (click)="onAddNewPoem(test.value)">Post</button>
+    <button mat-button (click)="onAddNewPoemDialogClose()">Cancel</button>
+  </mat-card-actions>
+
+</mat-card>
+

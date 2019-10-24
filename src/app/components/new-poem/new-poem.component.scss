@@ -1,0 +1,47 @@
+input[type="file"] {
+  display: none;
+}
+
+.image-preview {
+  width: 100%;
+  height: auto;
+}
+
+::ng-deep .mat-card-header-text {
+  margin: 0px;
+}
+
+.upload-label {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+
+  &:hover {
+    background-color: rgba(0,0,0,.04);
+  }
+
+  span {
+    padding-left: 10px;
+  }
+}
+
+.mat-card-content {
+  margin-bottom: 0;
+}
+
+.example-ripple-container {
+  cursor: pointer;
+  text-align: center;
+
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+
+  -webkit-user-drag: none;
+  -webkit-tap-highlight-color: transparent;
+}

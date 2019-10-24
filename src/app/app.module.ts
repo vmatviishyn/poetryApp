@@ -12,21 +12,23 @@ import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { NewPoemComponent } from './components/new-poem/new-poem.component';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { BottomSheetComponent } from './components/new-poem/bottom-sheet/bottom-sheet.component';
+import { HttpClientModule } from '@angular/common/http';
+import { AlifeFileToBase64Module } from 'alife-file-to-base64';
 
 @NgModule({
   declarations: [
     AppComponent,
     PoemsComponent,
     NewPoemComponent,
-    BottomSheetComponent,
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     BrowserAnimationsModule,
     MaterialModule,
     AngularFirestoreModule,
     AngularFireAuthModule,
+    AlifeFileToBase64Module,
     AngularFireModule.initializeApp(environment.firebase),
   ],
   providers: [
@@ -35,7 +37,6 @@ import { BottomSheetComponent } from './components/new-poem/bottom-sheet/bottom-
   ],
   entryComponents: [
     NewPoemComponent,
-    BottomSheetComponent,
   ],
   bootstrap: [AppComponent]
 })

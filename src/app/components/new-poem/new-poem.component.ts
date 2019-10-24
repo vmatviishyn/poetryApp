@@ -1,8 +1,7 @@
-import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material';
+import { Component } from '@angular/core';
 import { PoemsService } from 'src/app/services/poems.service';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { BottomSheetComponent } from './bottom-sheet/bottom-sheet.component';
+import { MatDialog } from '@angular/material/dialog';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-new-poem',
@@ -10,19 +9,44 @@ import { BottomSheetComponent } from './bottom-sheet/bottom-sheet.component';
   styleUrls: ['./new-poem.component.scss']
 })
 export class NewPoemComponent {
+  selectedFile = null;
+  url = null;
+  centered = false;
+  disabled = false;
+  unbounded = false;
+
+  radius: number;
+  color: string;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data,
     private poemsService: PoemsService,
-    private bottomSheet: MatBottomSheet
+    public dialog: MatDialog,
+    private http: HttpClient,
   ) { }
 
   onAddNewPoem(text) {
-    this.poemsService.addPoem({poemText: text})
-      .then(() => console.log('Poem added'));
+    // this.poemsService.addPoem({
+    //   poemText: text,
+    // })
+    // .then(() => console.log('Poem added'));
+
+    // --------------------------
+
+    // this.http.post()
   }
 
-  openBottomSheet(): void {
-    this.bottomSheet.open(BottomSheetComponent);
+  onFileChanges(event) {
+    this.selectedFile = event.target.files[0];
+
+
+    const reader = new FileReader();
+    reader.onload = (event: any) => {
+      this.url = event.target.result;
+    };
+    reader.readAsDataURL(event.target.files[0]);
+  }
+
+  onAddNewPoemDialogClose() {
+    this.dialog.closeAll();
   }
 }

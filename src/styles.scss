@@ -22,3 +22,16 @@ body {
     color: black !important;
   }
 }
+
+.mat-dialog-container {
+  background-color: grey;
+  opacity: 0.9;
+  border-radius: 10px;
+  width: 85% !important;
+  margin: 0 auto !important;
+}
+
+textarea {
+  width: 100%;
+  border: 0;
+}
