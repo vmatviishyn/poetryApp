@@ -1,30 +1,12 @@
 <mat-card class="poem">
   <mat-card-header>
-    <label
-      matRipple
-      [matRippleCentered]="centered"
-      [matRippleDisabled]="disabled"
-      [matRippleUnbounded]="unbounded"
-      [matRippleRadius]="radius"
-      [matRippleColor]="color"
-      for="upload"
-      class="upload-label example-ripple-container">
-        <mat-icon aria-hidden="false">photo_camera</mat-icon>
-        <span>
-          Add a Photo
-        </span>
-    </label>
-    <input
-      id="upload"
-      type="file"
-      (change)="onFileChanges($event)"
-    />
+    <app-file-upload
+      (imageLoaded)="onImageLoaded($event)"
+    ></app-file-upload>
   </mat-card-header>
 
-  <img *ngIf="url" class="image-preview" [src]="url" alt="">
-
   <mat-card-content>
-    <textarea name="" id="" cols="30" rows="10" #test></textarea>
+    <textarea rows="10" #test placeholder="Що у вас на думці?"></textarea>
   </mat-card-content>
 
   <mat-card-actions>

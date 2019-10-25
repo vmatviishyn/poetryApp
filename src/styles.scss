@@ -4,19 +4,19 @@ html, body {
   height: 100%;
 }
 body {
-  margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+  margin: 0;
 }
 
 .sticky {
   background: white;
   box-shadow: 0 3px 12px 0 rgba(0, 0, 0, 0.08);
+  height: 56;
   position: fixed;
   top: 0;
-  height: 56;
+  transition: .6s;
   width: 100%;
   z-index: 1;
-  transition: .6s;
 
   .mat-toolbar {
     color: black !important;
@@ -24,14 +24,13 @@ body {
 }
 
 .mat-dialog-container {
-  background-color: grey;
-  opacity: 0.9;
+  background-color: rgba(134, 134, 134, 0.73);
   border-radius: 10px;
-  width: 85% !important;
   margin: 0 auto !important;
+  width: 95% !important;
 }
 
 textarea {
-  width: 100%;
   border: 0;
+  width: 100%;
 }

@@ -3,18 +3,15 @@
   (backdropClick)="sidenav.close()">
   <mat-sidenav #sidenav (keydown.escape)="sidenav.close()" disableClose>
 
-    <div>
+    <div class="profile">
       <img src="https://via.placeholder.com/150" alt="">
       <div>Vitalii Matviishyn</div>
     </div>
 
-    <button mat-raised-button (click)="onAddNewPoemDialogOpen()">Add new poem</button><br>
+    <button class="add-new-poem" mat-raised-button (click)="onAddNewPoemDialogOpen()">Add new poem</button><br>
 
-    <hr>
-
-    <button mat-raised-button (click)="login()">Login</button><br>
-    <button mat-raised-button (click)="logout()">Logout</button>
-
+    <!-- <button mat-raised-button (click)="login()">Login</button><br>
+    <button mat-raised-button (click)="logout()">Logout</button> -->
   </mat-sidenav>
 
   <mat-sidenav-content>

@@ -1,6 +1,6 @@
 <div id="poems" class="poems" (scroll)="onWindowScroll($event);">
   <mat-card class="poem" *ngFor="let poem of poems">
-    <img mat-card-image src="/assets/images/post1.jpg" alt="Photo of a Shiba Inu">
+    <img *ngIf="poem.poemImage" mat-card-image [src]="poem.poemImage">
     <mat-card-content>
       <p class="poem--text">
         {{ poem.poemText.trim()}}

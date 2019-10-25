@@ -1,0 +1,28 @@
+<div
+  class="dropzone"
+  appDropZone
+  (hovered)="toggleHover($event)"
+  (dropped)="startUpload($event)"
+  [class.hovering]="isHovering"
+  *ngIf="!downloadURL">
+    <p>Drag and Drop a File</p>
+    <div class="file">
+      <label
+        matRipple
+        [matRippleCentered]="centered"
+        [matRippleDisabled]="disabled"
+        [matRippleUnbounded]="unbounded"
+        [matRippleRadius]="radius"
+        [matRippleColor]="color"
+        for="upload"
+        class="upload-label example-ripple-container file-label">
+          <mat-icon aria-hidden="false">photo_camera</mat-icon>
+          <span>or choose a file...</span>
+      </label>
+      <input id="upload" type="file" (change)="startUpload($event.target.files)"/>
+    </div>
+</div>
+
+<div *ngIf="downloadURL" class="image-wrapper">
+  <img [src]="downloadURL" alt="">
+</div>
