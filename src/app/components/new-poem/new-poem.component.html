@@ -1,5 +1,18 @@
+<mat-card class="poem">
+  <mat-card-header>
+    <app-file-upload
+      (imageLoaded)="onImageLoaded($event)"
+    ></app-file-upload>
+  </mat-card-header>
 
-<button mat-raised-button (click)="openBottomSheet()">Choose photo</button>
+  <mat-card-content>
+    <textarea rows="10" #test placeholder="Що у вас на думці?"></textarea>
+  </mat-card-content>
 
-<textarea name="" id="" cols="30" rows="10" #test></textarea>
-<button mat-raised-button (click)="onAddNewPoem(test.value)">test</button>
+  <mat-card-actions>
+    <button mat-button (click)="onAddNewPoem(test.value)">Post</button>
+    <button mat-button (click)="onAddNewPoemDialogClose()">Cancel</button>
+  </mat-card-actions>
+
+</mat-card>
+

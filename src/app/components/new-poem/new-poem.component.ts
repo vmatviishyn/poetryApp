@@ -1,8 +1,6 @@
-import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material';
+import { Component } from '@angular/core';
 import { PoemsService } from 'src/app/services/poems.service';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { BottomSheetComponent } from './bottom-sheet/bottom-sheet.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-new-poem',
@@ -10,19 +8,29 @@ import { BottomSheetComponent } from './bottom-sheet/bottom-sheet.component';
   styleUrls: ['./new-poem.component.scss']
 })
 export class NewPoemComponent {
+  selectedImage = null;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data,
     private poemsService: PoemsService,
-    private bottomSheet: MatBottomSheet
+    public dialog: MatDialog,
   ) { }
 
   onAddNewPoem(text) {
-    this.poemsService.addPoem({poemText: text})
-      .then(() => console.log('Poem added'));
+    this.poemsService.addPoem({
+      poemText: text,
+      poemImage: this.selectedImage
+    })
+    .then(() => {
+      console.log('Poem added');
+      this.onAddNewPoemDialogClose();
+    });
   }
 
-  openBottomSheet(): void {
-    this.bottomSheet.open(BottomSheetComponent);
+  onImageLoaded(image) {
+    this.selectedImage = image;
+  }
+
+  onAddNewPoemDialogClose() {
+    this.dialog.closeAll();
   }
 }
