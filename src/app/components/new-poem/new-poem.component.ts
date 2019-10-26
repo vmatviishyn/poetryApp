@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { PoemsService } from 'src/app/services/poems.service';
 import { MatDialog } from '@angular/material/dialog';
+import { HashService } from 'src/app/services/hash.service';
 
 @Component({
   selector: 'app-new-poem',
@@ -12,11 +13,13 @@ export class NewPoemComponent {
 
   constructor(
     private poemsService: PoemsService,
+    private hashService: HashService,
     public dialog: MatDialog,
   ) { }
 
   onAddNewPoem(text) {
     this.poemsService.addPoem({
+      poemId: this.hashService.generate(),
       poemText: text,
       poemImage: this.selectedImage
     })

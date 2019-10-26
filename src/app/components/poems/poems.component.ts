@@ -2,6 +2,7 @@ import { Component, OnInit, HostListener, Inject } from '@angular/core';
 import { trigger, state, transition, style, animate } from '@angular/animations';
 import { DOCUMENT } from '@angular/common';
 import { PoemsService } from 'src/app/services/poems.service';
+import { take } from 'rxjs/operators';
 
 
 @Component({
@@ -47,5 +48,17 @@ export class PoemsComponent implements OnInit {
       .subscribe(data => {
         this.poems = data;
       });
+  }
+
+  onEditPoem(poem) {
+    console.log(poem);
+  }
+
+  onDeletePoem(poem) {
+    this.poemsService.deletePoem(poem)
+    .pipe(take(1))
+    .subscribe(data => {
+      console.log(data);
+    });
   }
 }
