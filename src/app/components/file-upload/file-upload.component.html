@@ -4,8 +4,8 @@
   (hovered)="toggleHover($event)"
   (dropped)="startUpload($event)"
   [class.hovering]="isHovering"
-  *ngIf="!downloadURL">
-    <p>Drag and Drop a File</p>
+  *ngIf="!showSpinner && !downloadURL">
+    <p>Перетягніть фото</p>
     <div class="file">
       <label
         matRipple
@@ -17,11 +17,19 @@
         for="upload"
         class="upload-label example-ripple-container file-label">
           <mat-icon aria-hidden="false">photo_camera</mat-icon>
-          <span>or choose a file...</span>
+          <span>або виберіть фото...</span>
       </label>
       <input id="upload" type="file" (change)="startUpload($event.target.files)"/>
     </div>
 </div>
+
+<mat-progress-spinner
+  *ngIf="showSpinner"
+  class="example-margin"
+  [color]="spinnerColor"
+  [mode]="mode"
+  [value]="value">
+</mat-progress-spinner>
 
 <div *ngIf="downloadURL" class="image-wrapper">
   <img [src]="downloadURL" alt="">

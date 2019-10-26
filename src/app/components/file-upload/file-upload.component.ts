@@ -10,6 +10,11 @@ import { Observable } from 'rxjs';
 export class FileUploadComponent {
   @Output() imageLoaded = new EventEmitter<any>();
 
+  spinnerColor = 'primary';
+  mode = 'indeterminate';
+  value = 50;
+  showSpinner = false;
+
   centered = false;
   disabled = false;
   unbounded = false;
@@ -32,6 +37,7 @@ export class FileUploadComponent {
 
   startUpload(event: FileList) {
     const file = event.item(0);
+    this.showSpinner = true;
 
     if (file.type.split('/')[0] !== 'image') {
       console.error('unsupported file type');
@@ -47,6 +53,7 @@ export class FileUploadComponent {
     this.task.then(() => {
       fileRef.getDownloadURL().subscribe(url => {
         if (url) {
+          this.showSpinner = false;
           this.downloadURL = url;
           this.imageLoaded.emit(this.downloadURL);
         }
