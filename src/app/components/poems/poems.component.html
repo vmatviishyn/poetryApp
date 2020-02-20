@@ -1,22 +1,27 @@
-<div id="poems" class="poems" (scroll)="onWindowScroll($event);">
+<div id="poems" class="poems">
   <mat-card class="poem" *ngFor="let poem of poems">
-    <img *ngIf="poem.poemImage" mat-card-image [src]="poem.poemImage">
-    <button class="poem--menu-btn" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-      <mat-icon>more_vert</mat-icon>
-    </button>
-    <mat-menu #menu="matMenu" xPosition="before">
-      <button mat-menu-item (click)="onEditPoem(poem)">
-        <mat-icon>edit</mat-icon>
-        <span>Редагувати</span>
+    <div>
+      <img *ngIf="poem.poemImage" mat-card-image [src]="poem.poemImage" class="poem--photo">
+
+      <button class="poem--menu-btn" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+        <mat-icon>more_vert</mat-icon>
       </button>
-      <button mat-menu-item (click)="onDeletePoem(poem)">
-        <mat-icon>delete_forever</mat-icon>
-        <span>Видалити</span>
-      </button>
-    </mat-menu>
+
+      <mat-menu #menu="matMenu" xPosition="before">
+          <button mat-menu-item (click)="onEditPoem(poem)">
+            <mat-icon>edit</mat-icon>
+            <span>Редагувати</span>
+          </button>
+          <button mat-menu-item (click)="onDeletePoem(poem)">
+            <mat-icon>delete_forever</mat-icon>
+            <span>Видалити</span>
+          </button>
+      </mat-menu>
+    </div>
+
     <mat-card-content>
       <p class="poem--text">
-        {{ poem.poemText.trim()}}
+        {{ poem.poemText.trim() | truncatePipe : 90 : true : '...'  }}
       </p>
     </mat-card-content>
   </mat-card>

@@ -1,40 +1,16 @@
-<mat-sidenav-container
-  class="example-container"
-  (backdropClick)="sidenav.close()">
-  <mat-sidenav #sidenav (keydown.escape)="sidenav.close()" disableClose>
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <span>poetryApp</span>
+    <span class="example-spacer"></span>
+    <button mat-icon-button (click)="onAddNewPoemDialogOpen()">
+      <mat-icon>note_add</mat-icon>
+    </button>
 
-    <div class="profile">
-      <img src="https://via.placeholder.com/150" alt="">
-      <div>Vitalii Matviishyn</div>
-    </div>
+    <button mat-icon-button (click)="login()">
+      <mat-icon>exit_to_app</mat-icon>
+    </button>
 
-    <button class="add-new-poem" mat-raised-button (click)="onAddNewPoemDialogOpen()">Додати новий вірш</button>
+  </mat-toolbar-row>
+</mat-toolbar>
 
-    <!-- <button mat-raised-button (click)="login()">Login</button><br>
-    <button mat-raised-button (click)="logout()">Logout</button> -->
-  </mat-sidenav>
-
-  <mat-sidenav-content>
-
-    <div class="hero-image">
-      <div class="animated fadeInDown" id="header">
-        <mat-toolbar color="primary">
-          <mat-icon class="example-icon" aria-hidden="false" (click)="sidenav.open()">menu</mat-icon>
-          <span class="example-spacer"></span>
-          <span>My Poetry</span>
-        </mat-toolbar>
-      </div>
-
-      <div class="hero-text">
-        <div>
-          <p class="hero-text--primary">Hi</p>
-          <p class="hero-text--secondary">I write poetry</p>
-        </div>
-        <button (click)="scroll()">Почати читати</button>
-      </div>
-    </div>
-
-    <app-poems></app-poems>
-
-  </mat-sidenav-content>
-</mat-sidenav-container>
+<app-poems></app-poems>

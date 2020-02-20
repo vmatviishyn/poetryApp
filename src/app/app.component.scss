@@ -1,5 +1,13 @@
-.poems {
-  padding: 20px;
+mat-toolbar {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.mat-toolbar.mat-primary {
+  background-color: rgba(255, 255, 255, 0.95);
+  color: #000000;
 }
 
 body, html {
@@ -8,106 +16,10 @@ body, html {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-.hero-image {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/assets/images/background.jpg");
-  height: 50%;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  position: relative;
-  box-shadow: 0px 0px 20px 5px;
-
-  @media (max-width: 768px) {
-    background-size: 100%;
-    max-height: 200px;
-  }
-}
-
-.hero-text {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  text-align: center;
-  align-items: center;
-  height: 100%;
-  color: white;
-
-  @media (max-width: 768px) {
-    justify-content: flex-start;
-  }
-
-  &--primary {
-    margin: 0;
-    font-size: 30px;
-    display: inline-block;
-  }
-
-  button {
-    border: none;
-    outline: 0;
-    display: inline-block;
-    padding: 10px 25px;
-    color: white;
-    background-color: #7b7a7a !important;
-    text-align: center;
-    cursor: pointer;
-
-    &:hover {
-      background-color: #7b7a7a;
-      color: white;
-    }
-  }
-}
-
 .example-icon {
   padding: 0 14px;
-  cursor: pointer;
 }
 
 .example-spacer {
   flex: 1 1 auto;
-}
-
-.mat-toolbar {
-  background-color: transparent !important;
-}
-
-mat-sidenav {
-  width: 200px;
-}
-
-.mat-drawer-container {
-  height: 100%;
-}
-
-mat-sidenav {
-  background-color: rgba(134, 134, 134, 0.9);
-  width: 20vw;
-
-  ::ng-deep .mat-drawer-inner-container {
-    align-items: center;
-    display: flex !important;
-    flex-direction: column;
-    justify-content: flex-start;
-    padding-top: 30px;
-
-    .profile {
-      align-items: center;
-      display: flex;
-      flex-direction: column;
-
-      img {
-        border-radius: 50%;
-        margin-bottom: 10px;
-      }
-    }
-  }
-
-  @media (max-width: 768px) {
-    width: 60vw;
-  }
-}
-
-.add-new-poem {
-  margin-top: 10px;
 }

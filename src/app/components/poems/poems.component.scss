@@ -5,12 +5,25 @@
 
   .poem {
     border-radius: 10px;
-    box-shadow: 0px 0px 20px 5px;
+    box-shadow: 0px 0px 15px 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     margin: 20px;
-    width: 25%;
+    max-height: 400px;
+    padding-bottom: 30px;
+    width: 20%;
 
     @media (max-width: 768px) {
       width: 100%;
+    }
+
+    &--photo {
+      padding: 0;
+      max-height: 350px;
+      object-fit: cover;
+      border-top-left-radius: 10px 10px;
+      border-top-right-radius: 10px 10px;
     }
 
     &--text {

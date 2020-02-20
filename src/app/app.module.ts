@@ -13,16 +13,16 @@ import { NewPoemComponent } from './components/new-poem/new-poem.component';
 import { NgModule } from '@angular/core';
 import { PoemsComponent } from './components/poems/poems.component';
 import { environment } from 'src/environments/environment';
-import { DropZoneDirective } from './drop-zone.directive';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
+import { TruncatePipe } from './truncate-pipe.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
     NewPoemComponent,
     PoemsComponent,
-    DropZoneDirective,
     FileUploadComponent,
+    TruncatePipe,
   ],
   imports: [
     AlifeFileToBase64Module,

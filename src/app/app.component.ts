@@ -15,10 +15,6 @@ export class AppComponent {
     private authService: AuthService
   ) {}
 
-  scroll() {
-    document.getElementById('poems').scrollIntoView({ behavior: 'smooth' });
-  }
-
   onAddNewPoemDialogOpen() {
     this.dialog.open(NewPoemComponent, {
       width: '80vh',
@@ -31,9 +27,5 @@ export class AppComponent {
       .subscribe(data => {
         console.log('Data - ', data);
       });
-  }
-
-  logout() {
-
   }
 }
