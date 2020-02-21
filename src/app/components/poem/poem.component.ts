@@ -1,0 +1,56 @@
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, ParamMap } from '@angular/router';
+import { switchMap, take } from 'rxjs/operators';
+import { PoemsService } from 'src/app/services/poems.service';
+import { Observable } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { NewPoemComponent } from '../new-poem/new-poem.component';
+import { AuthService } from 'src/app/services/auth.service';
+
+@Component({
+  selector: 'app-poem',
+  templateUrl: './poem.component.html',
+  styleUrls: ['./poem.component.scss']
+})
+export class PoemComponent implements OnInit {
+
+  poem: any;
+  user: any;
+
+  constructor(
+    private route: ActivatedRoute,
+    private poemsService: PoemsService,
+    private authService: AuthService,
+    public dialog: MatDialog,
+  ) { }
+
+  ngOnInit() {
+    this.route.paramMap.pipe(
+      switchMap((params: ParamMap) => this.poemsService.getPoem(params.get('id')))
+    ).subscribe((poem: any) => {
+      this.poem = poem;
+      this.getUser();
+    });
+  }
+
+  getUser() {
+    this.authService.appUser$
+      .subscribe(appUser => {
+        this.user = appUser;
+      });
+  }
+
+  onEditPoem() {
+    this.dialog.open(NewPoemComponent, {
+      width: '80vh',
+      data: this.poem
+    });
+  }
+
+  onDeletePoem(poem) {
+    this.poemsService.deletePoem(poem)
+      .pipe(take(1))
+      .subscribe();
+  }
+
+}

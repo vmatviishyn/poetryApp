@@ -1,6 +1,7 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row>
-    <span>poetryApp</span>
+    <span routerLink="/poems" class="app-logo">poetryApp</span>
+
     <span class="example-spacer"></span>
 
     <button mat-button (click)="login()" *ngIf="!user">Log in</button>
@@ -17,4 +18,4 @@
   </mat-toolbar-row>
 </mat-toolbar>
 
-<app-poems></app-poems>
+<router-outlet></router-outlet>

@@ -1,0 +1,38 @@
+<div class="poem">
+
+    <div class="poem-wrapper" *ngIf="poem">
+      <div class="poem-img">
+        <img [src]="poem.poemImage" alt="">
+      </div>
+
+      <div class="poem-text">
+        <div>{{ poem.poemText }}</div>
+      </div>
+
+      <div class="poem-navigation">
+        <button *ngIf="user && user.isAdmin" class="poem-menu-btn" mat-icon-button [matMenuTriggerFor]="menu">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+
+        <mat-menu #menu="matMenu" xPosition="before">
+            <button mat-menu-item (click)="onEditPoem(poem)">
+              <mat-icon>edit</mat-icon>
+              <span>Редагувати</span>
+            </button>
+            <button mat-menu-item (click)="onDeletePoem(poem)">
+              <mat-icon>delete_forever</mat-icon>
+              <span>Видалити</span>
+            </button>
+        </mat-menu>
+
+        <button mat-icon-button>
+          <mat-icon>favorite</mat-icon>
+        </button>
+
+        <button mat-icon-button>
+          <mat-icon>mode_comment</mat-icon>
+        </button>
+
+      </div>
+    </div>
+</div>

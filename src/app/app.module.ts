@@ -15,6 +15,21 @@ import { PoemsComponent } from './components/poems/poems.component';
 import { environment } from 'src/environments/environment';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
 import { TruncatePipe } from './truncate-pipe.pipe';
+import { RouterModule, Routes } from '@angular/router';
+import { PoemComponent } from './components/poem/poem.component';
+
+const appRoutes: Routes = [
+  { path: 'poem/:id', component: PoemComponent },
+  {
+    path: 'poems',
+    component: PoemsComponent,
+  },
+  { path: '',
+    redirectTo: '/poems',
+    pathMatch: 'full'
+  },
+  // { path: '**', component: PageNotFoundComponent }
+];
 
 @NgModule({
   declarations: [
@@ -23,8 +38,10 @@ import { TruncatePipe } from './truncate-pipe.pipe';
     PoemsComponent,
     FileUploadComponent,
     TruncatePipe,
+    PoemComponent,
   ],
   imports: [
+    RouterModule.forRoot(appRoutes),
     AlifeFileToBase64Module,
     AngularFireAuthModule,
     AngularFireModule.initializeApp(environment.firebase),

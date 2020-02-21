@@ -1,26 +1,16 @@
 <div id="poems" class="poems">
-  <mat-card class="poem" *ngFor="let poem of poems">
+  <mat-card
+  class="poem"
+  *ngFor="let poem of poems"
+  [routerLink]="['/poem', poem.poemId]"
+  >
     <div>
       <img *ngIf="poem.poemImage" mat-card-image [src]="poem.poemImage" class="poem--photo">
-
-      <button *ngIf="user && user.isAdmin" class="poem--menu-btn" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-        <mat-icon>more_vert</mat-icon>
-      </button>
-      <mat-menu #menu="matMenu" xPosition="before">
-          <button mat-menu-item (click)="onEditPoem(poem)">
-            <mat-icon>edit</mat-icon>
-            <span>Редагувати</span>
-          </button>
-          <button mat-menu-item (click)="onDeletePoem(poem)">
-            <mat-icon>delete_forever</mat-icon>
-            <span>Видалити</span>
-          </button>
-      </mat-menu>
     </div>
 
     <mat-card-content>
       <p class="poem--text">
-        {{ poem.poemText.trim() | truncatePipe : 90 : true : '...'  }}
+        {{ poem.poemText.trim() }}
       </p>
     </mat-card-content>
   </mat-card>
