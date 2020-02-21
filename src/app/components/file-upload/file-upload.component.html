@@ -32,5 +32,10 @@
 </mat-progress-spinner>
 
 <div *ngIf="downloadURL" class="image-wrapper">
-  <img [src]="downloadURL" alt="">
+  
+  <img [src]="downloadURL" alt="" class="image-wrapper__img">
+
+  <button mat-icon-button class="image-wrapper__btn" (click)="deletePhoto()">
+    <mat-icon>close</mat-icon>
+  </button>
 </div>

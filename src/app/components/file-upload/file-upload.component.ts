@@ -1,6 +1,7 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { AngularFireStorage, AngularFireUploadTask } from 'angularfire2/storage';
 import { Observable } from 'rxjs';
+import { take } from 'rxjs/internal/operators/take';
 
 @Component({
   selector: 'app-file-upload',
@@ -9,6 +10,8 @@ import { Observable } from 'rxjs';
 })
 export class FileUploadComponent {
   @Output() imageLoaded = new EventEmitter<any>();
+  @Input() downloadURL: string;
+  @Input() path: string;
 
   spinnerColor = 'primary';
   mode = 'indeterminate';
@@ -23,12 +26,12 @@ export class FileUploadComponent {
   color: string;
 
   task: AngularFireUploadTask;
-  downloadURL: Observable<string> = null;
+
   isHovering: boolean;
   loaded = false;
 
   constructor(
-    private storage: AngularFireStorage
+    private storage: AngularFireStorage,
   ) { }
 
   toggleHover(event: boolean) {
@@ -44,20 +47,32 @@ export class FileUploadComponent {
       return;
     }
 
-    const path = `postImages/${new Date().getTime()}_${file.name}`;
+    this.path = `postImages/${new Date().getTime()}_${file.name}`;
     const customMetadata = { app: 'poetryApp' };
 
-    const fileRef = this.storage.ref(path);
+    const fileRef = this.storage.ref(this.path);
 
-    this.task = this.storage.upload(path, file, { customMetadata });
+    this.task = this.storage.upload(this.path, file, { customMetadata });
     this.task.then(() => {
-      fileRef.getDownloadURL().subscribe(url => {
+      fileRef.getDownloadURL()
+      .pipe(
+        take(1)
+      )
+      .subscribe(url => {
         if (url) {
           this.showSpinner = false;
           this.downloadURL = url;
-          this.imageLoaded.emit(this.downloadURL);
+          this.imageLoaded.emit({
+            downloadURL: this.downloadURL,
+            imagePath: this.path
+          });
         }
       });
     });
+  }
+
+  deletePhoto() {
+    this.storage.ref(this.path).delete();
+    this.downloadURL = null;
   }
 }

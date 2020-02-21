@@ -11,17 +11,28 @@ export class UserService {
 
   constructor(
     private afs: AngularFirestore,
-    private afauth: AngularFireAuth,
+    private afAuth: AngularFireAuth,
   ) { }
 
-  updateUser(name: string, photoURL: string, isAdmin: boolean): Observable<any> {
-    const user = { name, photoURL, isAdmin };
+  updateUser(name: string, photoURL: string, email: string): Observable<any> {
+    const user = { name, photoURL, email };
+    let firebaseUserData: firebase.User;
 
-    return this.afauth.authState
+    return this.afAuth.authState
       .pipe(
-        // create new user or update existing with new session id
-        switchMap((userData: firebase.User) => of(this.afs.doc(`users/${userData.uid}`).set(user))),
+        switchMap((userData: firebase.User) => {
+          firebaseUserData = userData;
+          return this.afs.doc(`users/${userData.uid}`).get()
+        }),
+        switchMap((document: any) => {
+          let method = document.exists ? 'update' : 'set';
+          return of(this.afs.doc(`users/${firebaseUserData.uid}`)[method](user))
+        }),
         switchMap(() => of(user)),
       );
+  }
+
+  get(uid: string): Observable<any> {
+    return this.afs.doc(`users/${uid}`).valueChanges();
   }
 }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { NewPoemComponent } from './components/new-poem/new-poem.component';
 import { AuthService } from './services/auth.service';
@@ -9,11 +9,20 @@ import { take } from 'rxjs/operators';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   constructor(
     public dialog: MatDialog,
     private authService: AuthService
   ) {}
+
+  user: any;
+
+  ngOnInit() {
+    this.authService.appUser$
+      .subscribe(appUser => {
+        this.user = appUser;
+      });
+  }
 
   onAddNewPoemDialogOpen() {
     this.dialog.open(NewPoemComponent, {
@@ -24,8 +33,10 @@ export class AppComponent {
   login() {
     this.authService.loginWithGoogle()
       .pipe(take(1))
-      .subscribe(data => {
-        console.log('Data - ', data);
-      });
+      .subscribe();
+  }
+
+  logout() {
+    this.authService.logout();
   }
 }

@@ -29,6 +29,10 @@ export class PoemsService {
   }
 
   editPoem(poem: any) {
-
+    return this.afs.collection('poems', (ref: firebase.firestore.CollectionReference) => ref
+      .where('poemId', '==', poem.poemId)).get()
+      .pipe(switchMap((snapshot: firebase.firestore.QuerySnapshot) => {
+        return of(this.afs.doc(`poems/${snapshot.docs[0].id}`).update(poem));
+      }));
   }
 }

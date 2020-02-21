@@ -2,13 +2,17 @@
   <mat-toolbar-row>
     <span>poetryApp</span>
     <span class="example-spacer"></span>
-    <button mat-icon-button (click)="onAddNewPoemDialogOpen()">
-      <mat-icon>note_add</mat-icon>
+
+    <button mat-button (click)="login()" *ngIf="!user">Log in</button>
+
+    <button mat-icon-button color="primary" [matMenuTriggerFor]="menu" *ngIf="user">
+      <img class="user-photo" [src]="user.photoURL">
     </button>
 
-    <button mat-icon-button (click)="login()">
-      <mat-icon>exit_to_app</mat-icon>
-    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item *ngIf="user && user.isAdmin" (click)="onAddNewPoemDialogOpen()">Add poem</button>
+      <button mat-menu-item (click)="logout()">Log out</button>
+    </mat-menu>
 
   </mat-toolbar-row>
 </mat-toolbar>

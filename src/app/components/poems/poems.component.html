@@ -3,10 +3,9 @@
     <div>
       <img *ngIf="poem.poemImage" mat-card-image [src]="poem.poemImage" class="poem--photo">
 
-      <button class="poem--menu-btn" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+      <button *ngIf="user && user.isAdmin" class="poem--menu-btn" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
         <mat-icon>more_vert</mat-icon>
       </button>
-
       <mat-menu #menu="matMenu" xPosition="before">
           <button mat-menu-item (click)="onEditPoem(poem)">
             <mat-icon>edit</mat-icon>
