@@ -18,6 +18,8 @@ export class PoemComponent implements OnInit {
   user: any;
   likes: any;
   isPoemLiked: any;
+  comment: string;
+  comments: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -33,6 +35,7 @@ export class PoemComponent implements OnInit {
       this.poem = poem;
       this.getUser();
       this.getLikes();
+      this.getComments();
     });
   }
 
@@ -78,8 +81,18 @@ export class PoemComponent implements OnInit {
     }
   }
 
-  onAddComment() {
+  onAddComment(poem, user) {
+    if (this.user) {
+      this.poemsService.addComment(poem, user, this.comment);
+      this.comment = '';
+    }
+  }
 
+  getComments() {
+    this.poemsService.getComments(this.poem.poemId)
+      .subscribe(comments => {
+        this.comments = comments;
+      });
   }
 
 }

@@ -69,9 +69,21 @@ export class PoemsService {
       .where('poemId', '==', poemId)).valueChanges();
   }
 
-  addComment(poemId: string, userInfo: any, commentText: any) {
-    // console.log('poems.service - poemId - addComment::: ', poemId);
-    // console.log('poems.service - userInfo -  addComment::: ', userInfo);
-    // console.log('poems.service - commentText -  addComment::: ', commentText);
+  addComment(poem: any, userInfo: any, commentText: string) {
+    const comment = {
+      poemId: poem.poemId,
+      userEmail: userInfo.email,
+      userName: userInfo.name,
+      userPhoto: userInfo.photoURL,
+      date: Date.now(),
+      commentText,
+    };
+
+    this.afs.collection('comments').add(comment);
+  }
+
+  getComments(poemId: string) {
+    return this.afs.collection('comments', (ref: firebase.firestore.CollectionReference) => ref
+      .where('poemId', '==', poemId)).valueChanges();
   }
 }

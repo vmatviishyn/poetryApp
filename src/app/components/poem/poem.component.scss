@@ -15,14 +15,24 @@
 
   &-wrapper {
     display: flex;
-    justify-content: space-around;
-    flex-direction: row;
+    flex-direction: column;
+
+    &-secondary {
+      display: flex;
+      justify-content: space-around;
+      flex-direction: row;
+
+      @media (max-width: 767px) {
+        width: 100%;
+        margin: 0px;
+        justify-content: space-around;
+        flex-direction: column;
+      }
+    }
 
     @media (max-width: 767px) {
       width: 100%;
       margin: 0px;
-      justify-content: space-around;
-      flex-direction: column;
     }
   }
 
@@ -58,7 +68,7 @@
     color: #000000;
 
     @media (max-width: 767px) {
-      order: 1;
+      display: none;
     }
   }
 
@@ -66,12 +76,58 @@
     width: 60px;
     display: flex;
     flex-direction: column;
+  }
+
+  &-bottom-navigation {
+    display: flex;
+    flex-direction: row;
+    margin-top: 20px;
+
+    &-menu-btn {
+      display: none;
+
+      @media (max-width: 767px) {
+        order: 1;
+        display: block;
+      }
+    }
 
     @media (max-width: 767px) {
       padding-top: 5px;
       padding-left: 12px;
-      flex-direction: row;
+    }
+  }
+
+  &-info {
+    margin-top: 5px;
+
+    &-comments {
+      margin-top: 20px;
+    }
+
+    .mat-icon-button {
+      width: 25px;
+      height: 25px;
+      line-height: 20px;
+    }
+
+    @media (max-width: 767px) {
+      margin-left: 20px;
     }
   }
 }
 
+.user-liked {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  border-radius: 10px;
+}
+
+.mat-input-element {
+  caret-color: #000000;
+}
+
+.example-full-width {
+  width: 400px;
+}

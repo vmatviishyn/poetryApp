@@ -17,6 +17,7 @@ import { FileUploadComponent } from './components/file-upload/file-upload.compon
 import { TruncatePipe } from './truncate-pipe.pipe';
 import { RouterModule, Routes } from '@angular/router';
 import { PoemComponent } from './components/poem/poem.component';
+import { FormsModule } from '@angular/forms';
 
 const appRoutes: Routes = [
   { path: 'poem/:id', component: PoemComponent },
@@ -51,6 +52,7 @@ const appRoutes: Routes = [
     BrowserModule,
     HttpClientModule,
     MaterialModule,
+    FormsModule,
   ],
   providers: [
     { provide: MAT_DIALOG_DATA, useValue: {} },
