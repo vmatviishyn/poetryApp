@@ -25,12 +25,13 @@
             </button>
         </mat-menu>
 
-        <button mat-icon-button>
-          <mat-icon>favorite</mat-icon>
+        <button mat-icon-button (click)="onAddLike(poem, user)">
+          <mat-icon *ngIf="likes?.length == 0">favorite_border</mat-icon>
+          <mat-icon *ngIf="likes?.length > 0" [matBadge]="likes?.length" matBadgeColor="warn">favorite</mat-icon>
         </button>
 
-        <button mat-icon-button>
-          <mat-icon>mode_comment</mat-icon>
+        <button mat-icon-button (click)="onAddComment()">
+          <mat-icon matBadge="15" matBadgeColor="warn">insert_comment</mat-icon>
         </button>
 
       </div>
