@@ -20,10 +20,9 @@ export class AuthService {
   }
 
   loginWithGoogle(): Observable<any> {
-    // login to the system using google authentication
+
     return from(this.afAuth.auth.signInWithPopup(new auth.GoogleAuthProvider()))
       .pipe(switchMap((userCredential: firebase.auth.UserCredential) => {
-        // save user and session id to database
         const { displayName, photoURL, email } = userCredential.user;
 
         return this.userService.updateUser(displayName, photoURL, email);
