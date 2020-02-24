@@ -17,6 +17,7 @@ export class PoemComponent implements OnInit {
   poem: any;
   user: any;
   likes: any;
+  isPoemLiked: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -39,6 +40,9 @@ export class PoemComponent implements OnInit {
     this.poemsService.getLikes(this.poem.poemId)
       .subscribe(likes => {
         this.likes = likes;
+        this.isPoemLiked = this.likes.find(element => {
+          return element.userEmail === this.user.email && element.poemId === this.poem.poemId;
+        });
       });
   }
 
@@ -64,11 +68,11 @@ export class PoemComponent implements OnInit {
 
   onAddLike(poem, user) {
     if (this.user && this.likes) {
-      const found = this.likes.find(element => {
+      this.isPoemLiked = this.likes.find(element => {
         return element.userEmail === this.user.email && element.poemId === this.poem.poemId;
       });
 
-      found
+      this.isPoemLiked
         ? this.poemsService.removeLike(poem, user).pipe(take(1)).subscribe()
         : this.poemsService.addLike(poem, user);
     }

@@ -26,8 +26,9 @@
         </mat-menu>
 
         <button mat-icon-button (click)="onAddLike(poem, user)">
-          <mat-icon *ngIf="likes?.length == 0">favorite_border</mat-icon>
-          <mat-icon *ngIf="likes?.length > 0" [matBadge]="likes?.length" matBadgeColor="warn">favorite</mat-icon>
+          <mat-icon [matBadge]="likes?.length" matBadgeColor="warn" [matBadgeHidden]="likes?.length == 0">
+            {{ isPoemLiked ? 'favorite' : 'favorite_border' }}
+          </mat-icon>
         </button>
 
         <button mat-icon-button (click)="onAddComment()">

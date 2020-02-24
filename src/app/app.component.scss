@@ -3,16 +3,26 @@ mat-toolbar {
   position: -webkit-sticky;
   top: 0;
   z-index: 1000;
+
+  mat-toolbar-row {
+    margin: 0 auto;
+    max-width: 1280px;
+  }
 }
 
 .mat-toolbar.mat-primary {
-  background-color: rgba(255, 255, 255, 0.95);
+  background-color: rgba(250, 250, 250, 0.95);
   color: #000000;
+}
+
+main {
+  margin: 0 auto;
+  max-width: 1420px;
+  height: 100vh;
 }
 
 body, html {
   height: 100%;
-  margin: 0;
   font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -32,4 +42,5 @@ body, html {
 
 .app-logo {
   cursor: pointer;
+  outline: none;
 }

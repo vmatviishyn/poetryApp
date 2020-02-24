@@ -1,9 +1,9 @@
 .poem {
-  padding: 0px 100px;
+  padding: 0px 10px;
 
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
   height: 100%;
 
@@ -14,8 +14,6 @@
   }
 
   &-wrapper {
-    width: 80%;
-    margin-top: -64px;
     display: flex;
     justify-content: space-around;
     flex-direction: row;
@@ -48,9 +46,11 @@
   &-text {
     user-select: none;
     white-space: pre-wrap;
+    margin: 0 30px;
 
     @media (max-width: 767px) {
       padding: 20px;
+      margin: 0;
     }
   }
 
