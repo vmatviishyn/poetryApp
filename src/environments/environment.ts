@@ -4,16 +4,6 @@
 
 export const environment = {
   production: false,
-  firebase: {
-    apiKey: "AIzaSyBj_pMuyPcpm_bHDgwB-i6KOez4zKfBNNI",
-    authDomain: "poetryapp-c4a06.firebaseapp.com",
-    databaseURL: "https://poetryapp-c4a06.firebaseio.com",
-    projectId: "poetryapp-c4a06",
-    storageBucket: "poetryapp-c4a06.appspot.com",
-    messagingSenderId: "1057766486199",
-    appId: "1:1057766486199:web:ab4afe265de29ec8aa5d32",
-    measurementId: "G-TM9ER9ZGL4"
-  }
 };
 
 /*
