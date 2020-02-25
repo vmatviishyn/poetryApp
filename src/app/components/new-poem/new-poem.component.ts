@@ -4,6 +4,8 @@ import { PoemsService } from 'src/app/services/poems.service';
 import { MatDialog } from '@angular/material/dialog';
 import { HashService } from 'src/app/services/hash.service';
 import { take } from 'rxjs/operators';
+import { SnackbarService } from 'src/app/services/snackbar.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-new-poem',
@@ -18,6 +20,8 @@ export class NewPoemComponent implements OnInit {
   constructor(
     private poemsService: PoemsService,
     private hashService: HashService,
+    private snackbarService: SnackbarService,
+    private router: Router,
     public dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) { }
@@ -27,18 +31,39 @@ export class NewPoemComponent implements OnInit {
   }
 
   onAddNewPoem(text) {
+    const poemId = this.hashService.generate();
+
+    if (!this.selectedImage) {
+      this.snackbarService.showSnackbar('Please add photo for poem!');
+      return;
+    } else if (!text) {
+      this.snackbarService.showSnackbar('Please add text for poem!');
+      return;
+    }
+
     this.poemsService.addPoem({
       poemImagePath: this.imagePath,
-      poemId: this.hashService.generate(),
+      poemId,
       poemText: text,
       poemImage: this.selectedImage
     })
     .then(() => {
       this.onAddNewPoemDialogClose();
+    })
+    .then(() => {
+      this.router.navigate(['/poem', poemId]);
     });
   }
 
   onEditPoem(text) {
+    if (!this.poemData.poemImage || !this.selectedImage) {
+      this.snackbarService.showSnackbar('Please add photo for poem!');
+      return;
+    } else if (!text) {
+      this.snackbarService.showSnackbar('Please add text for poem!');
+      return;
+    }
+
     this.poemsService.editPoem({
       poemImagePath: this.imagePath || this.poemData.poemImagePath,
       poemId: this.poemData.poemId,

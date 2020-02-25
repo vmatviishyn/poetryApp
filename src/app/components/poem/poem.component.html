@@ -61,13 +61,14 @@
           </mat-icon>
         </button>
 
-        <button mat-icon-button>
-          <mat-icon [matBadge]="comments?.length" matBadgeColor="warn" [matBadgeHidden]="comments?.length == 0">insert_comment</mat-icon>
+        <button mat-icon-button (click)="showAddComment()">
+          <mat-icon *ngIf="!isCommentsShown" [matBadge]="comments?.length" matBadgeColor="warn" [matBadgeHidden]="comments?.length == 0">chat_bubble_outline</mat-icon>
+          <mat-icon *ngIf="isCommentsShown" [matBadge]="comments?.length" matBadgeColor="warn" [matBadgeHidden]="comments?.length == 0">insert_comment</mat-icon>
         </button>
       </div>
 
       <div class="poem__comments-and-likes-section">
-        <div class="poem__comments-and-likes-section__likes">
+        <div class="poem__comments-and-likes-section__likes" *ngIf="likes?.length > 0">
           <span class="poem__comments-and-likes-section__likes--liked-by">Liked by</span>
           <button
             mat-icon-button
@@ -79,7 +80,7 @@
           </button>
         </div>
 
-        <div class="poem__comments-and-likes-section__comments">
+        <div class="poem__comments-and-likes-section__comments" >
 
           <mat-list>
             <mat-list-item *ngFor="let comment of comments">
@@ -97,13 +98,14 @@
             </button>
             </mat-list-item>
 
-            <mat-list-item class="textarea">
+            <mat-list-item class="textarea" *ngIf="isCommentsShown">
 
               <mat-form-field mat-line class="example-full-width">
                 <mat-label>Leave a comment</mat-label>
                 <textarea
                   [(ngModel)]="comment"
                   matInput
+                  #commentInput
                   placeholder="Ex. It makes me feel..."
                   matTextareaAutosize
                   matAutosizeMinRows="1"
@@ -111,7 +113,7 @@
                 </textarea>
               </mat-form-field>
 
-              <button mat-icon-button class="send-button" (click)="onAddComment(poem, user)">
+              <button mat-icon-button class="send-button" (click)="onAddComment(poem, user)" [disabled]="commentInput.value.length == 0">
                 <mat-icon>send</mat-icon>
               </button>
 

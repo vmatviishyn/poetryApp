@@ -1,18 +1,18 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { switchMap, take } from 'rxjs/operators';
 import { PoemsService } from 'src/app/services/poems.service';
-import { Observable, VirtualTimeScheduler } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { NewPoemComponent } from '../new-poem/new-poem.component';
 import { AuthService } from 'src/app/services/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-poem',
   templateUrl: './poem.component.html',
   styleUrls: ['./poem.component.scss']
 })
-export class PoemComponent implements OnInit {
+export class PoemComponent implements OnInit, OnDestroy {
 
   poem: any;
   user: any;
@@ -20,16 +20,23 @@ export class PoemComponent implements OnInit {
   isPoemLiked: any;
   comment: string;
   comments: any;
+  isCommentsShown = false;
+  paramSubscription: Subscription;
+  likesSubscription: Subscription;
+  userSubscription: Subscription;
+  commentsSubscription: Subscription;
+
 
   constructor(
     private route: ActivatedRoute,
     private poemsService: PoemsService,
+    private router: Router,
     private authService: AuthService,
     public dialog: MatDialog,
   ) { }
 
   ngOnInit() {
-    this.route.paramMap.pipe(
+    this.paramSubscription = this.route.paramMap.pipe(
       switchMap((params: ParamMap) => this.poemsService.getPoem(params.get('id')))
     ).subscribe((poem: any) => {
       this.poem = poem;
@@ -39,8 +46,12 @@ export class PoemComponent implements OnInit {
     });
   }
 
+  showAddComment() {
+    this.isCommentsShown = !this.isCommentsShown;
+  }
+
   getLikes() {
-    this.poemsService.getLikes(this.poem.poemId)
+    this.likesSubscription = this.poemsService.getLikes(this.poem.poemId)
       .subscribe(likes => {
         this.likes = likes;
         this.isPoemLiked = this.likes.find(element => {
@@ -50,7 +61,7 @@ export class PoemComponent implements OnInit {
   }
 
   getUser() {
-    this.authService.appUser$
+    this.userSubscription = this.authService.appUser$
       .subscribe(appUser => {
         this.user = appUser;
       });
@@ -64,6 +75,8 @@ export class PoemComponent implements OnInit {
   }
 
   onDeletePoem(poem) {
+    this.router.navigate(['/poems']);
+
     this.poemsService.deletePoem(poem)
       .pipe(take(1))
       .subscribe();
@@ -89,7 +102,7 @@ export class PoemComponent implements OnInit {
   }
 
   getComments() {
-    this.poemsService.getComments(this.poem.poemId)
+    this.commentsSubscription = this.poemsService.getComments(this.poem.poemId)
       .subscribe(comments => {
         this.comments = comments;
       });
@@ -99,6 +112,13 @@ export class PoemComponent implements OnInit {
     this.poemsService.deleteComment(comment)
       .pipe(take(1))
       .subscribe();
+  }
+
+  ngOnDestroy() {
+    this.paramSubscription.unsubscribe();
+    this.likesSubscription.unsubscribe();
+    this.userSubscription.unsubscribe();
+    this.commentsSubscription.unsubscribe();
   }
 
 }
