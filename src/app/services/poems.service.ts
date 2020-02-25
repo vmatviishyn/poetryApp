@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { switchMap } from 'rxjs/operators';
 import { of, Observable } from 'rxjs';
+import { HashService } from './hash.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,8 @@ import { of, Observable } from 'rxjs';
 export class PoemsService {
 
   constructor(
-    private afs: AngularFirestore
+    private afs: AngularFirestore,
+    private hashService: HashService
   ) { }
 
   getPoems() {
@@ -71,6 +73,7 @@ export class PoemsService {
 
   addComment(poem: any, userInfo: any, commentText: string) {
     const comment = {
+      commentId: this.hashService.generate(),
       poemId: poem.poemId,
       userEmail: userInfo.email,
       userName: userInfo.name,
@@ -84,6 +87,16 @@ export class PoemsService {
 
   getComments(poemId: string) {
     return this.afs.collection('comments', (ref: firebase.firestore.CollectionReference) => ref
-      .where('poemId', '==', poemId)).valueChanges();
+      .where('poemId', '==', poemId)
+      .orderBy('date', 'asc'))
+      .valueChanges();
+  }
+
+  deleteComment(comment: any) {
+    return this.afs.collection('comments', (ref: firebase.firestore.CollectionReference) => ref
+      .where('commentId', '==', comment.commentId)).get()
+      .pipe(switchMap((snapshot: firebase.firestore.QuerySnapshot) => {
+        return of(this.afs.doc(`comments/${snapshot.docs[0].id}`).delete());
+      }));
   }
 }

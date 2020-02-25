@@ -95,4 +95,10 @@ export class PoemComponent implements OnInit {
       });
   }
 
+  onDeleteComment(comment: any) {
+    this.poemsService.deleteComment(comment)
+      .pipe(take(1))
+      .subscribe();
+  }
+
 }
