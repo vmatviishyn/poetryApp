@@ -74,5 +74,6 @@ export class FileUploadComponent {
   deletePhoto() {
     this.storage.ref(this.path).delete();
     this.downloadURL = null;
+    this.imageLoaded.emit(null);
   }
 }

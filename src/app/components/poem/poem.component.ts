@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { NewPoemComponent } from '../new-poem/new-poem.component';
 import { AuthService } from 'src/app/services/auth.service';
 import { Subscription } from 'rxjs';
+import { AngularFireStorage } from 'angularfire2/storage';
 
 @Component({
   selector: 'app-poem',
@@ -33,6 +34,7 @@ export class PoemComponent implements OnInit, OnDestroy {
     private router: Router,
     private authService: AuthService,
     public dialog: MatDialog,
+    private storage: AngularFireStorage,
   ) { }
 
   ngOnInit() {
@@ -79,7 +81,9 @@ export class PoemComponent implements OnInit, OnDestroy {
 
     this.poemsService.deletePoem(poem)
       .pipe(take(1))
-      .subscribe();
+      .subscribe(() => {
+        this.storage.ref(poem.poemImagePath).delete();
+      });
   }
 
   onAddLike(poem, user) {

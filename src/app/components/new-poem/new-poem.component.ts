@@ -16,6 +16,7 @@ export class NewPoemComponent implements OnInit {
   selectedImage = null;
   poemData: any;
   imagePath: any;
+  imageLoaded = true;
 
   constructor(
     private poemsService: PoemsService,
@@ -56,7 +57,7 @@ export class NewPoemComponent implements OnInit {
   }
 
   onEditPoem(text) {
-    if (!this.poemData.poemImage || !this.selectedImage) {
+    if (!this.imageLoaded) {
       this.snackbarService.showSnackbar('Please add photo for poem!');
       return;
     } else if (!text) {
@@ -84,9 +85,14 @@ export class NewPoemComponent implements OnInit {
     }
   }
 
-  onImageLoaded({downloadURL, imagePath}) {
-    this.selectedImage = downloadURL;
-    this.imagePath = imagePath;
+  onImageLoaded(imageLoaded) {
+    if (imageLoaded) {
+      this.selectedImage = imageLoaded.downloadURL;
+      this.imagePath = imageLoaded.imagePath;
+      this.imageLoaded = true;
+    } else {
+      this.imageLoaded = false;
+    }
   }
 
   onAddNewPoemDialogClose() {
