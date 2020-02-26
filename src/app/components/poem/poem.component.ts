@@ -1,11 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { switchMap, take } from 'rxjs/operators';
+import { switchMap, take, takeUntil } from 'rxjs/operators';
 import { PoemsService } from 'src/app/services/poems.service';
 import { MatDialog } from '@angular/material/dialog';
 import { NewPoemComponent } from '../new-poem/new-poem.component';
 import { AuthService } from 'src/app/services/auth.service';
-import { Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
 import { AngularFireStorage } from 'angularfire2/storage';
 
 @Component({
@@ -22,23 +22,21 @@ export class PoemComponent implements OnInit, OnDestroy {
   comment: string;
   comments: any;
   isCommentsShown = false;
-  paramSubscription: Subscription;
-  likesSubscription: Subscription;
-  userSubscription: Subscription;
-  commentsSubscription: Subscription;
 
+  private unsubscribe$ = new Subject<void>();
 
   constructor(
     private route: ActivatedRoute,
     private poemsService: PoemsService,
     private router: Router,
     private authService: AuthService,
-    public dialog: MatDialog,
     private storage: AngularFireStorage,
+    public dialog: MatDialog,
   ) { }
 
   ngOnInit() {
-    this.paramSubscription = this.route.paramMap.pipe(
+    this.route.paramMap.pipe(
+      takeUntil(this.unsubscribe$),
       switchMap((params: ParamMap) => this.poemsService.getPoem(params.get('id')))
     ).subscribe((poem: any) => {
       this.poem = poem;
@@ -53,7 +51,8 @@ export class PoemComponent implements OnInit, OnDestroy {
   }
 
   getLikes() {
-    this.likesSubscription = this.poemsService.getLikes(this.poem.poemId)
+    this.poemsService.getLikes(this.poem.poemId)
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe(likes => {
         this.likes = likes;
         this.isPoemLiked = this.likes.find(element => {
@@ -63,7 +62,8 @@ export class PoemComponent implements OnInit, OnDestroy {
   }
 
   getUser() {
-    this.userSubscription = this.authService.appUser$
+    this.authService.appUser$
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe(appUser => {
         this.user = appUser;
       });
@@ -106,7 +106,8 @@ export class PoemComponent implements OnInit, OnDestroy {
   }
 
   getComments() {
-    this.commentsSubscription = this.poemsService.getComments(this.poem.poemId)
+    this.poemsService.getComments(this.poem.poemId)
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe(comments => {
         this.comments = comments;
       });
@@ -119,10 +120,8 @@ export class PoemComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.paramSubscription.unsubscribe();
-    this.likesSubscription.unsubscribe();
-    this.userSubscription.unsubscribe();
-    this.commentsSubscription.unsubscribe();
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
 }

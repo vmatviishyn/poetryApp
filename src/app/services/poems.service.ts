@@ -3,6 +3,7 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { switchMap } from 'rxjs/operators';
 import { of, Observable } from 'rxjs';
 import { HashService } from './hash.service';
+import { NotificationService } from './notification.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,8 @@ export class PoemsService {
 
   constructor(
     private afs: AngularFirestore,
-    private hashService: HashService
+    private hashService: HashService,
+    private notificationService: NotificationService,
   ) { }
 
   getPoems() {
@@ -54,7 +56,16 @@ export class PoemsService {
       userPhoto: userInfo.photoURL
     };
 
-    this.afs.collection('likes').add(like);
+    this.afs.collection('likes').add(like).then(() => {
+      this.notificationService.addNotification({
+        poemId: poem.poemId,
+        userEmail: userInfo.email,
+        userName: userInfo.name,
+        userPhoto: userInfo.photoURL,
+        date: Date.now(),
+        notificationId: this.hashService.generate()
+      });
+    });
   }
 
   removeLike(poem: any, userInfo: any) {
@@ -82,7 +93,16 @@ export class PoemsService {
       commentText,
     };
 
-    this.afs.collection('comments').add(comment);
+    this.afs.collection('comments').add(comment).then(() => {
+      this.notificationService.addNotification({
+        poemId: poem.poemId,
+        userEmail: userInfo.email,
+        userName: userInfo.name,
+        userPhoto: userInfo.photoURL,
+        date: Date.now(),
+        notificationId: this.hashService.generate()
+      });
+    });
   }
 
   getComments(poemId: string) {

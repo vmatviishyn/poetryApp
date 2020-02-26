@@ -4,6 +4,12 @@
 
     <span class="example-spacer"></span>
 
+    <button mat-icon-button *ngIf="user && user.isAdmin" class="notifications">
+      <mat-icon [matBadge]="notifications?.length" matBadgeColor="warn" [matBadgeHidden]="notifications?.length == 0">
+        {{ notifications?.length > 0 ? 'notifications' : 'notifications_none' }}
+      </mat-icon>
+    </button>
+
     <button mat-button (click)="login()" *ngIf="!user">Log in</button>
 
     <button mat-icon-button color="primary" [matMenuTriggerFor]="menu" *ngIf="user">
