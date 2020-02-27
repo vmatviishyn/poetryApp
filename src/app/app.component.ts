@@ -21,7 +21,7 @@ export class AppComponent implements OnInit, OnDestroy {
   ) {}
 
   user: any;
-  notifications: any;
+  notifications: any = [];
   userSubscription: Subscription;
 
 
@@ -65,5 +65,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.userSubscription.unsubscribe();
+  }
+
+  onNotificationClick(notification: any) {
+    this.router.navigate(['/poem', notification.poemId]);
   }
 }

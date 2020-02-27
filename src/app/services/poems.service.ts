@@ -58,6 +58,7 @@ export class PoemsService {
 
     this.afs.collection('likes').add(like).then(() => {
       this.notificationService.addNotification({
+        type: 'like',
         poemId: poem.poemId,
         userEmail: userInfo.email,
         userName: userInfo.name,
@@ -95,6 +96,7 @@ export class PoemsService {
 
     this.afs.collection('comments').add(comment).then(() => {
       this.notificationService.addNotification({
+        type: 'comment',
         poemId: poem.poemId,
         userEmail: userInfo.email,
         userName: userInfo.name,

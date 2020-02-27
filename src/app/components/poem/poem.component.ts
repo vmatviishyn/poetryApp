@@ -15,12 +15,12 @@ import { AngularFireStorage } from 'angularfire2/storage';
 })
 export class PoemComponent implements OnInit, OnDestroy {
 
-  poem: any;
-  user: any;
-  likes: any;
+  poem: any = null;
+  user: any = null;
+  likes: any = [];
   isPoemLiked: any;
-  comment: string;
-  comments: any;
+  comment: string = null;
+  comments: any = [];
   isCommentsShown = false;
 
   private unsubscribe$ = new Subject<void>();

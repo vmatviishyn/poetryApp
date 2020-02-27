@@ -4,16 +4,24 @@
 
     <span class="example-spacer"></span>
 
-    <button mat-icon-button *ngIf="user && user.isAdmin" class="notifications">
+    <button mat-icon-button *ngIf="user && user.isAdmin" class="notifications" [matMenuTriggerFor]="notificationsMenu">
       <mat-icon [matBadge]="notifications?.length" matBadgeColor="warn" [matBadgeHidden]="notifications?.length == 0">
         {{ notifications?.length > 0 ? 'notifications' : 'notifications_none' }}
       </mat-icon>
     </button>
 
+      <mat-menu class="notification-menu" #notificationsMenu="matMenu">
+        <button *ngFor="let notification of notifications" mat-menu-item (click)="onNotificationClick(notification)">
+          <img class="user-photo" [src]="notification?.userPhoto">
+          <span>{{notification.userName}}</span>
+          <span>{{notification.type === 'like' ? ' liked' : ' commented'}} your poem</span>
+        </button>
+      </mat-menu>
+
     <button mat-button (click)="login()" *ngIf="!user">Log in</button>
 
-    <button mat-icon-button color="primary" [matMenuTriggerFor]="menu" *ngIf="user">
-      <img class="user-photo" [src]="user.photoURL">
+    <button mat-icon-button color="primary" [matMenuTriggerFor]="menu" *ngIf="user?.photoURL as photoURL">
+      <img class="user-photo" src="{{photoURL}}">
     </button>
 
     <mat-menu #menu="matMenu">
