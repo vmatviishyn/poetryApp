@@ -1,17 +1,19 @@
-<div id="poems" class="poems">
-  <mat-card
-  class="poem"
-  *ngFor="let poem of poems"
-  [routerLink]="['/poem', poem.poemId]"
-  >
-    <div>
-      <img *ngIf="poem.poemImage" mat-card-image [src]="poem.poemImage" class="poem--photo">
-    </div>
+<ng-container *ngIf="poems$ | async as poems">
+  <div id="poems" class="poems">
+    <mat-card
+    class="poem"
+    *ngFor="let poem of poems"
+    [routerLink]="['/poem', poem.poemId]"
+    >
+      <div>
+        <img *ngIf="poem.poemImage" mat-card-image [src]="poem.poemImage" class="poem--photo">
+      </div>
 
-    <mat-card-content>
-      <p class="poem--text">
-        {{ poem.poemText.trim() }}
-      </p>
-    </mat-card-content>
-  </mat-card>
-</div>
+      <mat-card-content>
+        <p class="poem--text">
+          {{ poem.poemText.trim() }}
+        </p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</ng-container>

@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-
 import { PoemsService } from 'src/app/services/poems.service';
-import { take } from 'rxjs/operators';
-import { AuthService } from 'src/app/services/auth.service';
+import { Observable } from 'rxjs';
 
 
 @Component({
@@ -11,16 +9,13 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./poems.component.scss'],
 })
 export class PoemsComponent implements OnInit {
-  poems: any;
+  poems$: Observable<any>;
 
   constructor(
     private poemsService: PoemsService,
   ) { }
 
   ngOnInit() {
-    this.poemsService.getPoems()
-    .subscribe(data => {
-      this.poems = data;
-    });
+    this.poems$ = this.poemsService.getPoems();
   }
 }

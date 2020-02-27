@@ -5,6 +5,7 @@ import { AuthService } from './services/auth.service';
 import { take } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { NotificationService } from './services/notification.service';
+import { Router, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +16,8 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(
     public dialog: MatDialog,
     private authService: AuthService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private router: Router
   ) {}
 
   user: any;
@@ -24,15 +26,23 @@ export class AppComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
+    this.router.events.subscribe((evt) => {
+      if (!(evt instanceof NavigationEnd)) {
+        return;
+      }
+      window.scrollTo(0, 0)
+    });
+
     this.userSubscription = this.authService.appUser$
       .subscribe(appUser => {
         this.user = appUser;
 
-        this.notificationService.getNotification()
-          .subscribe((notifications: any) => {
-            this.notifications = notifications.filter(notification => notification.userEmail !== this.user.email);
-            console.log(this.notifications);
-          });
+        if (this.user) {
+          this.notificationService.getNotification()
+            .subscribe((notifications: any) => {
+              this.notifications = notifications.filter(notification => notification.userEmail !== this.user.email);
+            });
+        }
       });
 
   }

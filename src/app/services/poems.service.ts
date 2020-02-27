@@ -119,4 +119,28 @@ export class PoemsService {
         return of(this.afs.doc(`comments/${snapshot.docs[0].id}`).delete());
       }));
   }
+
+  removeLikeByPoemId(poemId: any) {
+    return this.afs.collection('likes', (ref: firebase.firestore.CollectionReference) => ref
+      .where('poemId', '==', poemId)).get()
+      .pipe(switchMap((snapshot: firebase.firestore.QuerySnapshot) => {
+          if (snapshot.docs.length) {
+            return of(this.afs.doc(`likes/${snapshot.docs[0].id}`).delete());
+          } else {
+            return of(null);
+          }
+      }));
+  }
+
+  deleteCommentByPoemId(poemId: any) {
+    return this.afs.collection('comments', (ref: firebase.firestore.CollectionReference) => ref
+      .where('poemId', '==', poemId)).get()
+      .pipe(switchMap((snapshot: firebase.firestore.QuerySnapshot) => {
+          if (snapshot.docs.length) {
+            return of(this.afs.doc(`comments/${snapshot.docs[0].id}`).delete());
+          } else {
+            return of(null);
+          }
+      }));
+  }
 }

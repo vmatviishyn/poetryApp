@@ -36,8 +36,8 @@ export class PoemComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.route.paramMap.pipe(
-      takeUntil(this.unsubscribe$),
-      switchMap((params: ParamMap) => this.poemsService.getPoem(params.get('id')))
+      switchMap((params: ParamMap) => this.poemsService.getPoem(params.get('id'))),
+      takeUntil(this.unsubscribe$)
     ).subscribe((poem: any) => {
       this.poem = poem;
       this.getUser();
@@ -77,12 +77,15 @@ export class PoemComponent implements OnInit, OnDestroy {
   }
 
   onDeletePoem(poem) {
+    const poemId = poem.poemId;
     this.router.navigate(['/poems']);
 
     this.poemsService.deletePoem(poem)
-      .pipe(take(1))
-      .subscribe(() => {
+    .pipe(take(1))
+    .subscribe(() => {
         this.storage.ref(poem.poemImagePath).delete();
+        this.poemsService.deleteCommentByPoemId(poemId).pipe(take(1)).subscribe();
+        this.poemsService.removeLikeByPoemId(poemId).pipe(take(1)).subscribe();
       });
   }
 
