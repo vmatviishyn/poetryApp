@@ -1,6 +1,5 @@
 import { Component, Output, EventEmitter, Input } from '@angular/core';
-import { AngularFireStorage, AngularFireUploadTask } from 'angularfire2/storage';
-import { Observable } from 'rxjs';
+import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage';
 import { take } from 'rxjs/internal/operators/take';
 
 @Component({

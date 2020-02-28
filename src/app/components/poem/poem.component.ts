@@ -6,7 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { NewPoemComponent } from '../new-poem/new-poem.component';
 import { AuthService } from 'src/app/services/auth.service';
 import { Subject } from 'rxjs';
-import { AngularFireStorage } from 'angularfire2/storage';
+import { AngularFireStorage } from '@angular/fire/storage';
 
 @Component({
   selector: 'app-poem',

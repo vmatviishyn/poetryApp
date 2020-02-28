@@ -1,13 +1,11 @@
-import { AlifeFileToBase64Module } from 'alife-file-to-base64';
-import { AngularFireAuthModule } from 'angularfire2/auth';
-import { AngularFireModule } from 'angularfire2';
-import { AngularFireStorageModule } from 'angularfire2/storage';
-import { AngularFirestoreModule } from 'angularfire2/firestore';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireStorageModule } from '@angular/fire/storage';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { MaterialModule } from './material.module';
 import { NewPoemComponent } from './components/new-poem/new-poem.component';
 import { NgModule } from '@angular/core';
@@ -18,6 +16,7 @@ import { TruncatePipe } from './truncate-pipe.pipe';
 import { RouterModule, Routes } from '@angular/router';
 import { PoemComponent } from './components/poem/poem.component';
 import { FormsModule } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 const appRoutes: Routes = [
   { path: 'poem/:id', component: PoemComponent },
@@ -43,7 +42,6 @@ const appRoutes: Routes = [
   ],
   imports: [
     RouterModule.forRoot(appRoutes),
-    AlifeFileToBase64Module,
     AngularFireAuthModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireStorageModule,

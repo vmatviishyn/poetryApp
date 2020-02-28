@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PoemsService } from 'src/app/services/poems.service';
 import { MatDialog } from '@angular/material/dialog';
 import { HashService } from 'src/app/services/hash.service';
