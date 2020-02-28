@@ -38,7 +38,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.user = appUser;
 
         if (this.user) {
-          this.notificationService.getNotification()
+          this.notificationService.getNotifications()
             .subscribe((notifications: any) => {
               this.notifications = notifications.filter(notification => notification.userEmail !== this.user.email);
             });
@@ -68,6 +68,12 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   onNotificationClick(notification: any) {
-    this.router.navigate(['/poem', notification.poemId]);
+    this.notificationService.deleteNotification(notification).pipe(take(1)).subscribe(() => {
+      this.router.navigate(['/poem', notification.poemId]);
+    });
+  }
+
+  onDeleteAllNotification() {
+    this.notificationService.deleteNotifications().pipe(take(1)).subscribe();
   }
 }

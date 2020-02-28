@@ -60,6 +60,7 @@ export class PoemsService {
       this.notificationService.addNotification({
         type: 'like',
         poemId: poem.poemId,
+        poemImage: poem.poemImage,
         userEmail: userInfo.email,
         userName: userInfo.name,
         userPhoto: userInfo.photoURL,
@@ -87,6 +88,7 @@ export class PoemsService {
     const comment = {
       commentId: this.hashService.generate(),
       poemId: poem.poemId,
+      poemImage: poem.poemImage,
       userEmail: userInfo.email,
       userName: userInfo.name,
       userPhoto: userInfo.photoURL,

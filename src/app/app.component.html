@@ -1,6 +1,9 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row>
-    <span routerLink="/poems" class="app-logo">poetryApp</span>
+    <span class="logo app-logo" routerLink="/poems">
+      <img class="logo1" src="assets/images/logo1.png" alt="">
+      <img class="logo2" src="assets/images/logo2.png" alt="">
+    </span>
 
     <span class="example-spacer"></span>
 
@@ -11,11 +14,23 @@
     </button>
 
       <mat-menu class="notification-menu" #notificationsMenu="matMenu">
-        <button *ngFor="let notification of notifications" mat-menu-item (click)="onNotificationClick(notification)">
-          <img class="user-photo" [src]="notification?.userPhoto">
-          <span>{{notification.userName}}</span>
-          <span>{{notification.type === 'like' ? ' liked' : ' commented'}} your poem</span>
+        <button (click)="onDeleteAllNotification()" *ngIf="notifications.length !== 0" mat-button class="clear-all-notifications">Clear all</button>
+
+        <button class="notification-button" *ngFor="let notification of notifications" mat-menu-item (click)="onNotificationClick(notification)">
+          <span class="notification-button-wrapper">
+            <img class="user-photo notification-button-photo" [src]="notification?.userPhoto">
+            <span class="notification-button-text">
+              {{notification.userName}}
+              {{notification.type === 'like' ? ' liked' : ' commented'}} a poem
+            </span>
+          </span>
+          <img [src]="notification?.poemImage" class="notification-poem-image" alt="">
         </button>
+
+
+        <div class="empty-notifications" *ngIf="notifications.length == 0">
+          There are no notifications.
+        </div>
       </mat-menu>
 
     <button mat-button (click)="login()" *ngIf="!user">Log in</button>
