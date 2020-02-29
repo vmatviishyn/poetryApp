@@ -12,11 +12,14 @@ import { NgModule } from '@angular/core';
 import { PoemsComponent } from './components/poems/poems.component';
 import { environment } from 'src/environments/environment';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
-import { TruncatePipe } from './truncate-pipe.pipe';
 import { RouterModule, Routes } from '@angular/router';
 import { PoemComponent } from './components/poem/poem.component';
 import { FormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { NavigationComponent } from './components/navigation/navigation.component';
+import { TruncatePipe } from './pipes/truncate-pipe.pipe';
+import { NotificationsComponent } from './components/notifications/notifications.component';
+import { MyAccountComponent } from './components/my-account/my-account.component';
 
 const appRoutes: Routes = [
   { path: 'poem/:id', component: PoemComponent },
@@ -39,6 +42,9 @@ const appRoutes: Routes = [
     FileUploadComponent,
     TruncatePipe,
     PoemComponent,
+    NavigationComponent,
+    NotificationsComponent,
+    MyAccountComponent,
   ],
   imports: [
     RouterModule.forRoot(appRoutes),

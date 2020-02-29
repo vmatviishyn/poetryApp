@@ -1,51 +1,11 @@
-<mat-toolbar color="primary">
-  <mat-toolbar-row>
-    <span class="logo app-logo" routerLink="/poems">
-      <img class="logo1" src="assets/images/logo1.png" alt="">
-      <img class="logo2" src="assets/images/logo2.png" alt="">
-    </span>
-
-    <span class="example-spacer"></span>
-
-    <button mat-icon-button *ngIf="user && user.isAdmin" class="notifications" [matMenuTriggerFor]="notificationsMenu">
-      <mat-icon [matBadge]="notifications?.length" matBadgeColor="warn" [matBadgeHidden]="notifications?.length == 0">
-        {{ notifications?.length > 0 ? 'notifications' : 'notifications_none' }}
-      </mat-icon>
-    </button>
-
-      <mat-menu class="notification-menu" #notificationsMenu="matMenu">
-        <button (click)="onDeleteAllNotification()" *ngIf="notifications.length !== 0" mat-button class="clear-all-notifications">Clear all</button>
-
-        <button class="notification-button" *ngFor="let notification of notifications" mat-menu-item (click)="onNotificationClick(notification)">
-          <span class="notification-button-wrapper">
-            <img class="user-photo notification-button-photo" [src]="notification?.userPhoto">
-            <span class="notification-button-text">
-              {{notification.userName}}
-              {{notification.type === 'like' ? ' liked' : ' commented'}} a poem
-            </span>
-          </span>
-          <img [src]="notification?.poemImage" class="notification-poem-image" alt="">
-        </button>
-
-
-        <div class="empty-notifications" *ngIf="notifications.length == 0">
-          There are no notifications.
-        </div>
-      </mat-menu>
-
-    <button mat-button (click)="login()" *ngIf="!user">Log in</button>
-
-    <button mat-icon-button color="primary" [matMenuTriggerFor]="menu" *ngIf="user?.photoURL as photoURL">
-      <img class="user-photo" src="{{photoURL}}">
-    </button>
-
-    <mat-menu #menu="matMenu">
-      <button mat-menu-item *ngIf="user && user.isAdmin" (click)="onAddNewPoemDialogOpen()">Add poem</button>
-      <button mat-menu-item (click)="logout()">Log out</button>
-    </mat-menu>
-
-  </mat-toolbar-row>
-</mat-toolbar>
+<app-navigation
+  [user]="user"
+  [notifications]="notifications"
+  (login)="onLogin()"
+  (logout)="onLogout()"
+  (deleteAllNotifications)="onDeleteAllNotifications()"
+  (notificationClick)="onNotificationClick($event)"
+></app-navigation>
 
 <main>
   <router-outlet></router-outlet>

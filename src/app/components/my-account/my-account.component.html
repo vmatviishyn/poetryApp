@@ -1,0 +1,12 @@
+<div class="my-account">
+  <button mat-button (click)="onLogin()" *ngIf="!user">Log in</button>
+
+  <button mat-icon-button color="primary" [matMenuTriggerFor]="menu" *ngIf="user?.photoURL as photoURL">
+    <img class="my-account__profile-image" src="{{photoURL}}">
+  </button>
+
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item *ngIf="user && user.isAdmin" (click)="onAddNewPoemDialogOpen()">Add poem</button>
+    <button mat-menu-item (click)="onLogout()">Log out</button>
+  </mat-menu>
+</div>

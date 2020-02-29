@@ -1,6 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { NewPoemComponent } from './components/new-poem/new-poem.component';
 import { AuthService } from './services/auth.service';
 import { take } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
@@ -14,7 +12,6 @@ import { Router, NavigationEnd } from '@angular/router';
 })
 export class AppComponent implements OnInit, OnDestroy {
   constructor(
-    public dialog: MatDialog,
     private authService: AuthService,
     private notificationService: NotificationService,
     private router: Router
@@ -24,13 +21,12 @@ export class AppComponent implements OnInit, OnDestroy {
   notifications: any = [];
   userSubscription: Subscription;
 
-
   ngOnInit() {
     this.router.events.subscribe((evt) => {
       if (!(evt instanceof NavigationEnd)) {
         return;
       }
-      window.scrollTo(0, 0)
+      window.scrollTo(0, 0);
     });
 
     this.userSubscription = this.authService.appUser$
@@ -47,24 +43,14 @@ export class AppComponent implements OnInit, OnDestroy {
 
   }
 
-  onAddNewPoemDialogOpen() {
-    this.dialog.open(NewPoemComponent, {
-      width: '80vh',
-    });
-  }
-
-  login() {
+  onLogin() {
     this.authService.loginWithGoogle()
       .pipe(take(1))
       .subscribe();
   }
 
-  logout() {
+  onLogout() {
     this.authService.logout();
-  }
-
-  ngOnDestroy() {
-    this.userSubscription.unsubscribe();
   }
 
   onNotificationClick(notification: any) {
@@ -73,7 +59,11 @@ export class AppComponent implements OnInit, OnDestroy {
     });
   }
 
-  onDeleteAllNotification() {
+  onDeleteAllNotifications() {
     this.notificationService.deleteNotifications().pipe(take(1)).subscribe();
+  }
+
+  ngOnDestroy() {
+    this.userSubscription.unsubscribe();
   }
 }

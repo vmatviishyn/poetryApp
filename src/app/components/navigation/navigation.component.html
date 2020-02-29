@@ -1,0 +1,25 @@
+<mat-toolbar color="primary" class="navigation">
+  <mat-toolbar-row>
+
+    <span class="navigation__logo" routerLink="/poems">
+      <img class="navigation__logo--image" src="assets/images/logo1.png" alt="Logo image">
+      <img class="navigation__logo--name" src="assets/images/logo2.png" alt="Logo business name">
+    </span>
+
+    <span class="navigation__spacer" aria-hidden="true"></span>
+
+    <app-notifications
+      [user]="user"
+      [notifications]="notifications"
+      (deleteAllNotifications)="onDeleteAllNotifications()"
+      (notificationClick)="onNotificationClick($event)"
+    ></app-notifications>
+
+    <app-my-account
+      [user]="user"
+      (login)="onLogin()"
+      (logout)="onLogout()"
+    ></app-my-account>
+
+  </mat-toolbar-row>
+</mat-toolbar>

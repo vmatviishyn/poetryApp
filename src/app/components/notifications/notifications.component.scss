@@ -1,0 +1,48 @@
+.notifications {
+
+  &__menu-button {
+    margin-right: 10px;
+  }
+
+  &__clear-all-button {
+    align-self: flex-end;
+    margin: 10px;
+  }
+
+  &__notification-button {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  &__notification-wrapper {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+
+  &__notification-user-photo {
+    border-radius: 20px;
+    height: 35px;
+    margin-right: 10px;
+    width: 35px;
+  }
+
+  &__notification-text {
+    margin-right: 10px;
+  }
+
+  &__poem-image {
+    border-radius: 5px;
+    height: 40px;
+    object-fit: cover;
+    width: 40px;
+  }
+
+  &__empty {
+    margin: 20px;
+    text-align: center;
+  }
+}

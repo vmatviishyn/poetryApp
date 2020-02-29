@@ -1,105 +1,10 @@
-mat-toolbar {
-  position: fixed;
-  top: 0;
-  z-index: 1000;
-
-  mat-toolbar-row {
-    margin: 0 auto;
-    max-width: 1280px;
-  }
-}
-
-.mat-toolbar.mat-primary {
-  background-color: rgba(255, 255, 255, 0.85);
-  color: #000000;
-  box-shadow: 0px 0px 5px 0px;
+body, html {
+  height: 100%;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 main {
   margin: 64px auto 0;
   max-width: 1420px;
   height: 100vh;
-}
-
-body, html {
-  height: 100%;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-.example-icon {
-  padding: 0 14px;
-}
-
-.example-spacer {
-  flex: 1 1 auto;
-}
-
-.notifications {
-  margin-right: 10px;
-}
-
-.user-photo {
-  width: 35px;
-  height: 35px;
-  border-radius: 20px;
-}
-
-.app-logo {
-  cursor: pointer;
-  outline: none;
-
-  @media (max-width: 767px) {
-    cursor: auto;
-  }
-}
-
-.empty-notifications {
-  text-align: center;
-  margin: 20px;
-}
-
-.clear-all-notifications {
-  align-self: flex-end;
-  margin: 10px;
-}
-
-.notification-poem-image {
-  width: 40px;
-  height: 40px;
-  border-radius: 5px;
-  object-fit: cover;
-}
-
-.notification-button {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.notification-button-photo {
-  margin-right: 10px;
-}
-
-.notification-button-text {
-  margin-right: 10px;
-}
-
-.notification-button-wrapper {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-}
-
-.logo1 {
-  height: 45px;
-  width: 45px;
-  margin-right: 10px;
-  margin-top: 10px;
-}
-
-.logo2 {
-  height: 45px;
-  width: auto;
 }

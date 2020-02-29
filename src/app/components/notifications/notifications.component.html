@@ -1,0 +1,49 @@
+<div class="notifications">
+  <button
+    mat-icon-button
+    *ngIf="user && user.isAdmin"
+    class="notifications__menu-button"
+    [matMenuTriggerFor]="notificationsMenu">
+
+    <mat-icon
+      matBadgeColor="warn"
+      [matBadge]="notifications?.length"
+      [matBadgeHidden]="notifications?.length == 0">
+
+      {{ notifications?.length > 0 ? 'notifications' : 'notifications_none' }}
+    </mat-icon>
+  </button>
+
+  <mat-menu #notificationsMenu="matMenu">
+    <button
+      mat-button
+      *ngIf="notifications.length !== 0"
+      (click)="onDeleteAllNotifications()"
+      class="notifications__clear-all-button">
+
+        Clear all
+    </button>
+
+    <button
+      mat-menu-item
+      *ngFor="let notification of notifications"
+      class="notifications__notification-button"
+      (click)="onNotificationClick(notification)">
+
+      <span class="notifications__notification-wrapper">
+        <img class="notifications__notification-user-photo" [src]="notification?.userPhoto">
+        <span class="notifications__notification-text">
+          {{notification.userName}}
+          {{notification.type === 'like' ? ' liked' : ' commented'}} a poem
+        </span>
+      </span>
+
+      <img [src]="notification?.poemImage" class="notifications__poem-image" alt="Notification poem image">
+    </button>
+
+    <div class="notifications__empty" *ngIf="notifications.length == 0">
+      There are no notifications.
+    </div>
+  </mat-menu>
+</div>
+
