@@ -5,9 +5,9 @@ import { NotificationService } from './services/notification.service';
 import { Router, NavigationEnd } from '@angular/router';
 
 import { Store } from '@ngrx/store';
-import { LoginUser, GetUser } from './store/actions';
 import { User } from './models/user.model';
 
+import * as fromActions from './store/actions';
 import * as fromStore from './store';
 
 @Component({
@@ -16,9 +16,7 @@ import * as fromStore from './store';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  // user: User;
   notifications: any = [];
-  // userSubscription: Subscription;
 
   user$: Observable<User>;
 
@@ -36,7 +34,8 @@ export class AppComponent implements OnInit {
       window.scrollTo(0, 0);
     });
 
-    this.store.dispatch(new GetUser());
+    this.store.dispatch(new fromActions.GetUser());
+
     this.user$ = this.store.select(fromStore.getUserSelector);
 
     // this.notificationService.getNotifications()
@@ -46,11 +45,11 @@ export class AppComponent implements OnInit {
   }
 
   onLogin() {
-    this.store.dispatch(new LoginUser());
+    this.store.dispatch(new fromActions.LoginUser());
   }
 
   onLogout() {
-    // this.authService.logout();
+    this.store.dispatch(new fromActions.LogoutUser());
   }
 
   onNotificationClick(notification: any) {

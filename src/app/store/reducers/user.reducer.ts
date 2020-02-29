@@ -44,6 +44,30 @@ export function reducer(state = initialState, action: fromActions.UserAction): U
       };
     }
 
+    case fromActions.LOGOUT_USER: {
+      return {
+        ...state,
+        loading: true,
+      };
+    }
+
+    case fromActions.LOGOUT_USER_SUCCESS: {
+      return {
+        ...state,
+        loading: false,
+        loaded: true,
+        user: null,
+      };
+    }
+
+    case fromActions.LOGOUT_USER_FAIL: {
+      return {
+        ...state,
+        loading: false,
+        loaded: false,
+      };
+    }
+
     case fromActions.GET_USER: {
       return {
         ...state,

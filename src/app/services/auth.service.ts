@@ -10,14 +10,10 @@ import { AngularFirestore } from '@angular/fire/firestore';
 })
 export class AuthService {
 
-  user$: Observable<firebase.User>;
-
   constructor(
     private afAuth: AngularFireAuth,
     private afs: AngularFirestore,
-  ) {
-    this.user$ = afAuth.authState;
-  }
+  ) { }
 
   loginWithGoogle(): Observable<any> {
     return from(this.afAuth.auth.signInWithPopup(new auth.GoogleAuthProvider()))
@@ -33,16 +29,6 @@ export class AuthService {
 
   logout() {
     this.afAuth.auth.signOut();
-  }
-
-  getUser() {
-    // return this.user$.pipe(
-    //   switchMap(user => {
-    //     return user
-    //       ? this.get(user.uid)
-    //       : of(null);
-    //   })
-    // );
   }
 
   updateUser(name: string, photoURL: string, email: string): Observable<any> {
