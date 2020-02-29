@@ -1,25 +1,32 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { AuthService } from './services/auth.service';
+import { Component, OnInit } from '@angular/core';
 import { take } from 'rxjs/operators';
-import { Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { NotificationService } from './services/notification.service';
 import { Router, NavigationEnd } from '@angular/router';
+
+import { Store } from '@ngrx/store';
+import { LoginUser, GetUser } from './store/actions';
+import { User } from './models/user.model';
+
+import * as fromStore from './store';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit, OnDestroy {
-  constructor(
-    private authService: AuthService,
-    private notificationService: NotificationService,
-    private router: Router
-  ) {}
-
-  user: any;
+export class AppComponent implements OnInit {
+  // user: User;
   notifications: any = [];
-  userSubscription: Subscription;
+  // userSubscription: Subscription;
+
+  user$: Observable<User>;
+
+  constructor(
+    private notificationService: NotificationService,
+    private router: Router,
+    private store: Store<fromStore.AppState>,
+  ) {}
 
   ngOnInit() {
     this.router.events.subscribe((evt) => {
@@ -29,28 +36,21 @@ export class AppComponent implements OnInit, OnDestroy {
       window.scrollTo(0, 0);
     });
 
-    this.userSubscription = this.authService.appUser$
-      .subscribe(appUser => {
-        this.user = appUser;
+    this.store.dispatch(new GetUser());
+    this.user$ = this.store.select(fromStore.getUserSelector);
 
-        if (this.user) {
-          this.notificationService.getNotifications()
-            .subscribe((notifications: any) => {
-              this.notifications = notifications.filter(notification => notification.userEmail !== this.user.email);
-            });
-        }
-      });
-
+    // this.notificationService.getNotifications()
+    //   .subscribe((notifications: any) => {
+    //     this.notifications = notifications.filter(notification => notification.userEmail !== this.user.email);
+    //   });
   }
 
   onLogin() {
-    this.authService.loginWithGoogle()
-      .pipe(take(1))
-      .subscribe();
+    this.store.dispatch(new LoginUser());
   }
 
   onLogout() {
-    this.authService.logout();
+    // this.authService.logout();
   }
 
   onNotificationClick(notification: any) {
@@ -61,9 +61,5 @@ export class AppComponent implements OnInit, OnDestroy {
 
   onDeleteAllNotifications() {
     this.notificationService.deleteNotifications().pipe(take(1)).subscribe();
-  }
-
-  ngOnDestroy() {
-    this.userSubscription.unsubscribe();
   }
 }

@@ -1,5 +1,5 @@
 <app-navigation
-  [user]="user"
+  [user]="user$ | async"
   [notifications]="notifications"
   (login)="onLogin()"
   (logout)="onLogout()"

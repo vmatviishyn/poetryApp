@@ -3,7 +3,7 @@ import { Observable, from, of } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { auth } from 'firebase/app';
 import { switchMap } from 'rxjs/operators';
-import { UserService } from './user.service';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -14,18 +14,20 @@ export class AuthService {
 
   constructor(
     private afAuth: AngularFireAuth,
-    private userService: UserService
+    private afs: AngularFirestore,
   ) {
     this.user$ = afAuth.authState;
   }
 
   loginWithGoogle(): Observable<any> {
-
     return from(this.afAuth.auth.signInWithPopup(new auth.GoogleAuthProvider()))
       .pipe(switchMap((userCredential: firebase.auth.UserCredential) => {
         const { displayName, photoURL, email } = userCredential.user;
-
-        return this.userService.updateUser(displayName, photoURL, email);
+        return of({
+          name: displayName,
+          photoURL,
+          email
+        });
       }));
   }
 
@@ -33,13 +35,35 @@ export class AuthService {
     this.afAuth.auth.signOut();
   }
 
-  get appUser$(): Observable<any>{
-    return this.user$.pipe(
-      switchMap(user => {
-        return user
-          ? this.userService.get(user.uid)
-          : of(null);
-      })
-    )
+  getUser() {
+    // return this.user$.pipe(
+    //   switchMap(user => {
+    //     return user
+    //       ? this.get(user.uid)
+    //       : of(null);
+    //   })
+    // );
+  }
+
+  updateUser(name: string, photoURL: string, email: string): Observable<any> {
+    const user = { name, photoURL, email };
+    let firebaseUserData: firebase.User;
+
+    return this.afAuth.authState
+      .pipe(
+        switchMap((userData: firebase.User) => {
+          firebaseUserData = userData;
+          return this.afs.doc(`users/${userData.uid}`).get();
+        }),
+        switchMap((document: any) => {
+          const method = document.exists ? 'update' : 'set';
+          return of(this.afs.doc(`users/${firebaseUserData.uid}`)[method](user));
+        }),
+        switchMap(() => of(user)),
+      );
+  }
+
+  get(uid: string): Observable<any> {
+    return this.afs.doc(`users/${uid}`).valueChanges();
   }
 }

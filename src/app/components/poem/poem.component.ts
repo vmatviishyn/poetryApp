@@ -62,11 +62,11 @@ export class PoemComponent implements OnInit, OnDestroy {
   }
 
   getUser() {
-    this.authService.appUser$
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(appUser => {
-        this.user = appUser;
-      });
+    // this.authService.getUser()
+    //   .pipe(takeUntil(this.unsubscribe$))
+    //   .subscribe(appUser => {
+    //     this.user = appUser;
+    //   });
   }
 
   onEditPoem() {
@@ -92,7 +92,7 @@ export class PoemComponent implements OnInit, OnDestroy {
   onAddLike(poem, user) {
     if (this.user && this.likes) {
       this.isPoemLiked = this.likes.find(element => {
-        return element.userEmail === this.user.email && element.poemId === this.poem.poemId;
+        return element?.userEmail === this.user?.email && element.poemId === this.poem.poemId;
       });
 
       this.isPoemLiked

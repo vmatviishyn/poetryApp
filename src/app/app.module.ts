@@ -21,6 +21,14 @@ import { TruncatePipe } from './pipes/truncate-pipe.pipe';
 import { NotificationsComponent } from './components/notifications/notifications.component';
 import { MyAccountComponent } from './components/my-account/my-account.component';
 
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreRouterConnectingModule, RouterStateSerializer } from '@ngrx/router-store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+
+import { reducers } from './store/reducers';
+import { UserEffects } from './store/effects/user.effect';
+
 const appRoutes: Routes = [
   { path: 'poem/:id', component: PoemComponent },
   {
@@ -31,7 +39,6 @@ const appRoutes: Routes = [
     redirectTo: '/poems',
     pathMatch: 'full'
   },
-  // { path: '**', component: PageNotFoundComponent }
 ];
 
 @NgModule({
@@ -57,8 +64,13 @@ const appRoutes: Routes = [
     HttpClientModule,
     MaterialModule,
     FormsModule,
+    StoreModule.forRoot(reducers),
+    EffectsModule.forRoot([UserEffects]),
+    // StoreRouterConnectingModule.forRoot(),
+    !environment.production ? StoreDevtoolsModule.instrument() : [],
   ],
   providers: [
+    // { provide: RouterStateSerializer, useClass: CustomSerializer }
     { provide: MAT_DIALOG_DATA, useValue: {} },
     { provide: MatDialogRef, useValue: {} },
   ],
