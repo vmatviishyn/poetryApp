@@ -29,6 +29,7 @@ export function reducer(state = initialState, action: fromActions.UserAction): U
         ...state,
         isAuthenticated: true,
         user: {
+          ...state.user,
           email: action.payload.email,
           name: action.payload.name,
           photoURL: action.payload.photoURL,
@@ -82,9 +83,11 @@ export function reducer(state = initialState, action: fromActions.UserAction): U
         loaded: true,
         isAuthenticated: true,
         user: {
+          ...state.user,
           email: action.payload.email,
           name: action.payload.name,
           photoURL: action.payload.photoURL,
+          isAdmin: action.payload.isAdmin
         },
       };
     }

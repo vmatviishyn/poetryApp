@@ -27,7 +27,7 @@ import { StoreRouterConnectingModule, RouterStateSerializer } from '@ngrx/router
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 import { reducers } from './store/reducers';
-import { UserEffects } from './store/effects/user.effect';
+import * as fromEffects from './store/effects';
 
 const appRoutes: Routes = [
   { path: 'poem/:id', component: PoemComponent },
@@ -65,7 +65,7 @@ const appRoutes: Routes = [
     MaterialModule,
     FormsModule,
     StoreModule.forRoot(reducers),
-    EffectsModule.forRoot([UserEffects]),
+    EffectsModule.forRoot(fromEffects.effects),
     // StoreRouterConnectingModule.forRoot(),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
   ],

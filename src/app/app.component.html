@@ -1,6 +1,6 @@
 <app-navigation
   [user]="user$ | async"
-  [notifications]="notifications"
+  [notifications]="notifications$ | async"
   (login)="onLogin()"
   (logout)="onLogout()"
   (deleteAllNotifications)="onDeleteAllNotifications()"

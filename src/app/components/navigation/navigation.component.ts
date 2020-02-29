@@ -1,13 +1,16 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { User } from '../../models/user.model';
+import { Notification } from '../../models/notification.model';
 
 @Component({
   selector: 'app-navigation',
   templateUrl: './navigation.component.html',
-  styleUrls: ['./navigation.component.scss']
+  styleUrls: ['./navigation.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavigationComponent {
-  @Input() user: any;
-  @Input() notifications: any;
+  @Input() user: User;
+  @Input() notifications: Notification[];
 
   @Output() login = new EventEmitter();
   @Output() logout = new EventEmitter();

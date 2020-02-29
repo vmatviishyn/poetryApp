@@ -5,7 +5,9 @@ import { NotificationService } from './services/notification.service';
 import { Router, NavigationEnd } from '@angular/router';
 
 import { Store } from '@ngrx/store';
+
 import { User } from './models/user.model';
+import { Notification } from './models/notification.model';
 
 import * as fromActions from './store/actions';
 import * as fromStore from './store';
@@ -16,8 +18,7 @@ import * as fromStore from './store';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  notifications: any = [];
-
+  notifications$: Observable<Notification[]>;
   user$: Observable<User>;
 
   constructor(
@@ -35,8 +36,10 @@ export class AppComponent implements OnInit {
     });
 
     this.store.dispatch(new fromActions.GetUser());
+    this.store.dispatch(new fromActions.GetNotifications());
 
     this.user$ = this.store.select(fromStore.getUserSelector);
+    this.notifications$ = this.store.select(fromStore.getNotificationsSelector);
 
     // this.notificationService.getNotifications()
     //   .subscribe((notifications: any) => {
