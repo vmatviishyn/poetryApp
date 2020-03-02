@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Effect, Actions, ofType } from '@ngrx/effects';
 import { NotificationService } from 'src/app/services/notification.service';
-import { map, switchMap, catchError } from 'rxjs/operators';
+import { map, switchMap, catchError, pluck } from 'rxjs/operators';
 import { Notification } from '../../models/notification.model';
 import { of } from 'rxjs';
 import * as fromActions from '../actions';
@@ -24,4 +24,14 @@ export class NotificationEffects {
       );
     })
   );
+
+  // addNotification$ = this.actions.pipe(
+  //   ofType(fromActions.ADD_NOTIFICATION),
+  //   pluck('payload'),
+  //   switchMap((notification: Notification) => {
+  //     return this.notificationService.addNotification(notification).pipe(
+  //       map(notification => new fromActions.AddNotificationSuccess(notification))
+  //     );
+  //   })
+  // );
 }

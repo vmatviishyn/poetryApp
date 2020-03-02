@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { take } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { take, takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 import { NotificationService } from './services/notification.service';
 import { Router, NavigationEnd } from '@angular/router';
 
@@ -17,9 +17,11 @@ import * as fromStore from './store';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
-  notifications$: Observable<Notification[]>;
-  user$: Observable<User>;
+export class AppComponent implements OnInit, OnDestroy {
+  private unsubscribe$ = new Subject<void>();
+
+  notifications: Notification[];
+  user: User;
 
   constructor(
     private notificationService: NotificationService,
@@ -38,13 +40,17 @@ export class AppComponent implements OnInit {
     this.store.dispatch(new fromActions.GetUser());
     this.store.dispatch(new fromActions.GetNotifications());
 
-    this.user$ = this.store.select(fromStore.getUserSelector);
-    this.notifications$ = this.store.select(fromStore.getNotificationsSelector);
+    this.store.select(fromStore.getUserSelector)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((user: User) => {
+        this.user = user;
 
-    // this.notificationService.getNotifications()
-    //   .subscribe((notifications: any) => {
-    //     this.notifications = notifications.filter(notification => notification.userEmail !== this.user.email);
-    //   });
+        this.store.select(fromStore.getNotificationsSelector)
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe((notifications: Notification[]) => {
+            this.notifications = notifications.filter((notification: Notification) => notification?.userEmail !== this.user?.email);
+          });
+      });
   }
 
   onLogin() {
@@ -63,5 +69,10 @@ export class AppComponent implements OnInit {
 
   onDeleteAllNotifications() {
     this.notificationService.deleteNotifications().pipe(take(1)).subscribe();
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

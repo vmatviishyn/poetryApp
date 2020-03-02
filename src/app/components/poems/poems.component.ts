@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { PoemsService } from 'src/app/services/poems.service';
 import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import * as fromStore from '../../store';
 
 
 @Component({
@@ -12,10 +13,11 @@ export class PoemsComponent implements OnInit {
   poems$: Observable<any>;
 
   constructor(
-    private poemsService: PoemsService,
+    private store: Store<fromStore.AppState>,
   ) { }
 
   ngOnInit() {
-    this.poems$ = this.poemsService.getPoems();
+    this.store.dispatch(new fromStore.GetPoems());
+    this.poems$ = this.store.select(fromStore.getPoemsSelector);
   }
 }

@@ -13,7 +13,7 @@ export class NotificationService {
   ) { }
 
   addNotification(notification) {
-    return this.getNotifications()
+    return of(this.getNotifications()
       .pipe(take(1))
       .subscribe(notifications => {
         let isNotificationExist = notifications.find((element: any) => {
@@ -21,9 +21,9 @@ export class NotificationService {
         });
 
         if (!isNotificationExist) {
-          return this.afs.collection('notifications').add(notification);
+          return of(this.afs.collection('notifications').add(notification));
         }
-      });
+      }));
   }
 
   deleteNotification(notification) {
