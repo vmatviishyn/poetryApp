@@ -4,9 +4,16 @@ import { switchMap, take, takeUntil } from 'rxjs/operators';
 import { PoemsService } from 'src/app/services/poems.service';
 import { MatDialog } from '@angular/material/dialog';
 import { NewPoemComponent } from '../new-poem/new-poem.component';
-import { AuthService } from 'src/app/services/auth.service';
-import { Subject } from 'rxjs';
+import { Subject, from } from 'rxjs';
 import { AngularFireStorage } from '@angular/fire/storage';
+import { Store } from '@ngrx/store';
+
+import * as fromStore from '../../store';
+
+import { Poem } from '../../models/poem.model';
+import { Like } from '../../models/like.model';
+import { Comment } from '../../models/comment.model';
+import { User } from '../../models/user.model';
 
 @Component({
   selector: 'app-poem',
@@ -14,24 +21,23 @@ import { AngularFireStorage } from '@angular/fire/storage';
   styleUrls: ['./poem.component.scss']
 })
 export class PoemComponent implements OnInit, OnDestroy {
+  private unsubscribe$ = new Subject<void>();
 
-  poem: any = null;
-  user: any = null;
-  likes: any = [];
+  poem: Poem = null;
+  user: User = null;
+  likes: Like[] = [];
   isPoemLiked: any;
   comment: string = null;
-  comments: any = [];
+  comments: Comment[] = [];
   isCommentsShown = false;
-
-  private unsubscribe$ = new Subject<void>();
 
   constructor(
     private route: ActivatedRoute,
     private poemsService: PoemsService,
     private router: Router,
-    private authService: AuthService,
     private storage: AngularFireStorage,
     public dialog: MatDialog,
+    private store: Store<fromStore.AppState>,
   ) { }
 
   ngOnInit() {
@@ -40,33 +46,36 @@ export class PoemComponent implements OnInit, OnDestroy {
       takeUntil(this.unsubscribe$)
     ).subscribe((poem: any) => {
       this.poem = poem;
-      this.getUser();
-      this.getLikes();
-      this.getComments();
+
+      this.store.dispatch(new fromStore.GetPoemLikes(this.poem));
+      this.store.dispatch(new fromStore.GetPoemComments(this.poem));
     });
+
+    this.store.select(fromStore.getUserSelector)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(appUser => {
+        this.user = appUser;
+      });
+
+    this.store.select(fromStore.getLikesSelector)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((likes: Like[]) => {
+        this.likes = likes;
+
+        this.isPoemLiked = this.likes.find((like: Like) => {
+          return like.userEmail === this.user?.email && like?.poemId === this.poem?.poemId;
+        });
+      });
+
+    this.store.select(fromStore.getCommentsSelector)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((comments: Comment[]) => {
+        this.comments = comments;
+      });
   }
 
   showAddComment() {
     this.isCommentsShown = !this.isCommentsShown;
-  }
-
-  getLikes() {
-    this.poemsService.getLikes(this.poem.poemId)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(likes => {
-        this.likes = likes;
-        this.isPoemLiked = this.likes.find(element => {
-          return element.userEmail === this.user.email && element.poemId === this.poem.poemId;
-        });
-      });
-  }
-
-  getUser() {
-    // this.authService.getUser()
-    //   .pipe(takeUntil(this.unsubscribe$))
-    //   .subscribe(appUser => {
-    //     this.user = appUser;
-    //   });
   }
 
   onEditPoem() {
@@ -108,14 +117,6 @@ export class PoemComponent implements OnInit, OnDestroy {
     }
   }
 
-  getComments() {
-    this.poemsService.getComments(this.poem.poemId)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(comments => {
-        this.comments = comments;
-      });
-  }
-
   onDeleteComment(comment: any) {
     this.poemsService.deleteComment(comment)
       .pipe(take(1))
@@ -126,5 +127,4 @@ export class PoemComponent implements OnInit, OnDestroy {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
-
 }

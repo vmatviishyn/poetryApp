@@ -38,18 +38,18 @@ export class AppComponent implements OnInit, OnDestroy {
     });
 
     this.store.dispatch(new fromActions.GetUser());
-    this.store.dispatch(new fromActions.GetNotifications());
 
     this.store.select(fromStore.getUserSelector)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((user: User) => {
-        this.user = user;
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe((user: User) => {
+      this.user = user;
+      this.store.dispatch(new fromActions.GetNotifications());
+    });
 
-        this.store.select(fromStore.getNotificationsSelector)
-          .pipe(takeUntil(this.unsubscribe$))
-          .subscribe((notifications: Notification[]) => {
-            this.notifications = notifications.filter((notification: Notification) => notification?.userEmail !== this.user?.email);
-          });
+    this.store.select(fromStore.getNotificationsSelector)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((notifications: Notification[]) => {
+        this.notifications = notifications.filter((notification: Notification) => notification?.userEmail !== this.user?.email);
       });
   }
 
