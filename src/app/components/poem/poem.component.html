@@ -61,9 +61,10 @@
           </mat-icon>
         </button>
 
-        <button mat-icon-button (click)="showAddComment()">
-          <mat-icon *ngIf="!isCommentsShown" [matBadge]="comments?.length" matBadgeColor="warn" [matBadgeHidden]="comments?.length == 0">chat_bubble_outline</mat-icon>
-          <mat-icon *ngIf="isCommentsShown" [matBadge]="comments?.length" matBadgeColor="warn" [matBadgeHidden]="comments?.length == 0">insert_comment</mat-icon>
+        <button mat-icon-button (click)="showAddComment()" *ngIf="comments$ | async as comments">
+          <mat-icon [matBadge]="comments?.length" matBadgeColor="warn" [matBadgeHidden]="comments?.length == 0">
+            {{ isCommentsShown ? 'insert_comment' : 'chat_bubble_outline' }}
+          </mat-icon>
         </button>
       </div>
 
@@ -82,7 +83,7 @@
 
         <div class="poem__comments-and-likes-section__comments" >
 
-          <mat-list>
+          <mat-list *ngIf="comments$ | async as comments">
             <mat-list-item *ngFor="let comment of comments">
               <img mat-list-icon [src]="comment?.userPhoto">
 

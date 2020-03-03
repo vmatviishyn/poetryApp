@@ -25,13 +25,26 @@ export class NotificationEffects {
     })
   );
 
-  // addNotification$ = this.actions.pipe(
-  //   ofType(fromActions.ADD_NOTIFICATION),
-  //   pluck('payload'),
-  //   switchMap((notification: Notification) => {
-  //     return this.notificationService.addNotification(notification).pipe(
-  //       map(notification => new fromActions.AddNotificationSuccess(notification))
-  //     );
-  //   })
-  // );
+  @Effect()
+  removeAllNotification$ = this.actions.pipe(
+    ofType(fromActions.REMOVE_ALL_NOTIFICATIONS),
+    switchMap(() => {
+      return this.notificationService.deleteNotifications().pipe(
+        map(() => new fromActions.RemoveAllNotificationsSuccess()),
+        catchError(error => of(new fromActions.RemoveAllNotificationsFail(error)))
+      );
+    })
+  );
+
+  @Effect()
+  removeNotification$ = this.actions.pipe(
+    ofType(fromActions.REMOVE_NOTIFICATION),
+    pluck('payload'),
+    switchMap((notification: Notification) => {
+      return this.notificationService.deleteNotification(notification).pipe(
+        map(() => new fromActions.RemoveNotificationSuccess()),
+        catchError(error => of(new fromActions.RemoveNotificationFail(error)))
+      );
+    })
+  );
 }

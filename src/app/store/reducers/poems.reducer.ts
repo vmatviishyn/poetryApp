@@ -94,6 +94,30 @@ export function reducer(state = initialState, action: fromActions.PoemsAction): 
       };
     }
 
+    case fromActions.REMOVE_POEM_LIKE:
+    case fromActions.ADD_POEM_LIKE: {
+      return {
+        ...state,
+        loading: true,
+      };
+    }
+    case fromActions.REMOVE_POEM_LIKE:
+    case fromActions.ADD_POEM_LIKE_SUCCESS: {
+      return {
+        ...state,
+        loading: false,
+        loaded: true,
+      };
+    }
+    case fromActions.REMOVE_POEM_LIKE:
+    case fromActions.ADD_POEM_LIKE_FAIL: {
+      return {
+        ...state,
+        loading: false,
+        loaded: false,
+      };
+    }
+
     default: {
       return state;
     }

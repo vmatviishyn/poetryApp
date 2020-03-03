@@ -11,7 +11,7 @@ export interface AppState {
 export const reducers = {
   user: fromUser.reducer,
   notifications: fromNotifications.reducer,
-  poems: fromPoems.reducer
+  poems: fromPoems.reducer,
 };
 
 export const getUserState = (state: AppState) => state.user;

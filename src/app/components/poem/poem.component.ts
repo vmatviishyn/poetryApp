@@ -1,13 +1,16 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { switchMap, take, takeUntil } from 'rxjs/operators';
-import { PoemsService } from 'src/app/services/poems.service';
-import { MatDialog } from '@angular/material/dialog';
-import { NewPoemComponent } from '../new-poem/new-poem.component';
-import { Subject, from } from 'rxjs';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { Store } from '@ngrx/store';
+import { MatDialog } from '@angular/material/dialog';
 
+import { switchMap, take, takeUntil } from 'rxjs/operators';
+import { Subject, Observable } from 'rxjs';
+
+import { PoemsService } from 'src/app/services/poems.service';
+
+import { NewPoemComponent } from '../new-poem/new-poem.component';
+
+import { Store } from '@ngrx/store';
 import * as fromStore from '../../store';
 
 import { Poem } from '../../models/poem.model';
@@ -23,20 +26,21 @@ import { User } from '../../models/user.model';
 export class PoemComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
 
+  comments$: Observable<Comment[]>;
+
   poem: Poem = null;
   user: User = null;
   likes: Like[] = [];
   isPoemLiked: any;
   comment: string = null;
-  comments: Comment[] = [];
   isCommentsShown = false;
 
   constructor(
+    public dialog: MatDialog,
     private route: ActivatedRoute,
     private poemsService: PoemsService,
     private router: Router,
     private storage: AngularFireStorage,
-    public dialog: MatDialog,
     private store: Store<fromStore.AppState>,
   ) { }
 
@@ -53,29 +57,18 @@ export class PoemComponent implements OnInit, OnDestroy {
 
     this.store.select(fromStore.getUserSelector)
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(appUser => {
-        this.user = appUser;
+      .subscribe((user: User) => {
+        this.user = user;
       });
 
     this.store.select(fromStore.getLikesSelector)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((likes: Like[]) => {
         this.likes = likes;
-
-        this.isPoemLiked = this.likes.find((like: Like) => {
-          return like.userEmail === this.user?.email && like?.poemId === this.poem?.poemId;
-        });
+        this.isPoemLiked = this.checkIsPoemLiked();
       });
 
-    this.store.select(fromStore.getCommentsSelector)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((comments: Comment[]) => {
-        this.comments = comments;
-      });
-  }
-
-  showAddComment() {
-    this.isCommentsShown = !this.isCommentsShown;
+    this.comments$ = this.store.select(fromStore.getCommentsSelector);
   }
 
   onEditPoem() {
@@ -98,29 +91,33 @@ export class PoemComponent implements OnInit, OnDestroy {
       });
   }
 
-  onAddLike(poem, user) {
-    if (this.user && this.likes) {
-      this.isPoemLiked = this.likes.find(element => {
-        return element?.userEmail === this.user?.email && element.poemId === this.poem.poemId;
-      });
-
+  onAddLike(poem: Poem, user: User) {
+    if (user) {
       this.isPoemLiked
-        ? this.poemsService.removeLike(poem, user).pipe(take(1)).subscribe()
-        : this.poemsService.addLike(poem, user);
+        ? this.store.dispatch(new fromStore.RemovePoemLike({poem, user}))
+        : this.store.dispatch(new fromStore.AddPoemLike({poem, user}));
     }
   }
 
-  onAddComment(poem, user) {
-    if (this.user) {
-      this.poemsService.addComment(poem, user, this.comment);
+  showAddComment() {
+    this.isCommentsShown = !this.isCommentsShown;
+  }
+
+  onAddComment(poem: Poem, user: User) {
+    if (user) {
+      this.store.dispatch(new fromStore.AddPoemComment({ poem, user, comment: this.comment }));
       this.comment = '';
     }
   }
 
-  onDeleteComment(comment: any) {
-    this.poemsService.deleteComment(comment)
-      .pipe(take(1))
-      .subscribe();
+  onDeleteComment(comment: Comment) {
+    this.store.dispatch(new fromStore.RemovePoemComment(comment));
+  }
+
+  checkIsPoemLiked() {
+    return this.likes.find((like: Like) => {
+      return like?.userEmail === this.user?.email && like?.poemId === this.poem?.poemId;
+    });
   }
 
   ngOnDestroy() {

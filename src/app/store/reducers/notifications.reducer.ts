@@ -22,7 +22,6 @@ export function reducer(state = initialState, action: fromActions.NotificationAc
         loading: true,
       };
     }
-
     case fromActions.GET_NOTIFICATIONS_SUCCESS: {
       return {
         ...state,
@@ -33,8 +32,50 @@ export function reducer(state = initialState, action: fromActions.NotificationAc
         ]
       };
     }
-
     case fromActions.GET_NOTIFICATIONS_FAIL: {
+      return {
+        ...state,
+        loading: false,
+        loaded: false,
+      };
+    }
+
+    case fromActions.REMOVE_ALL_NOTIFICATIONS: {
+      return {
+        ...state,
+        loading: true,
+      };
+    }
+    case fromActions.REMOVE_ALL_NOTIFICATIONS_SUCCESS: {
+      return {
+        ...state,
+        loading: false,
+        loaded: true,
+        notifications: []
+      };
+    }
+    case fromActions.REMOVE_ALL_NOTIFICATIONS_FAIL: {
+      return {
+        ...state,
+        loading: false,
+        loaded: false,
+      };
+    }
+
+    case fromActions.REMOVE_NOTIFICATION: {
+      return {
+        ...state,
+        loading: true,
+      };
+    }
+    case fromActions.REMOVE_NOTIFICATION_SUCCESS: {
+      return {
+        ...state,
+        loading: false,
+        loaded: true,
+      };
+    }
+    case fromActions.REMOVE_NOTIFICATION_FAIL: {
       return {
         ...state,
         loading: false,

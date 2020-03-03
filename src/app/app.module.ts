@@ -23,7 +23,6 @@ import { MyAccountComponent } from './components/my-account/my-account.component
 
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
-import { StoreRouterConnectingModule, RouterStateSerializer } from '@ngrx/router-store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 import { reducers } from './store/reducers';
@@ -44,33 +43,31 @@ const appRoutes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
-    NewPoemComponent,
-    PoemsComponent,
     FileUploadComponent,
-    TruncatePipe,
-    PoemComponent,
-    NavigationComponent,
-    NotificationsComponent,
     MyAccountComponent,
+    NavigationComponent,
+    NewPoemComponent,
+    NotificationsComponent,
+    PoemComponent,
+    PoemsComponent,
+    TruncatePipe,
   ],
   imports: [
-    RouterModule.forRoot(appRoutes),
     AngularFireAuthModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireStorageModule,
     AngularFirestoreModule,
     BrowserAnimationsModule,
     BrowserModule,
+    EffectsModule.forRoot(fromEffects.effects),
+    FormsModule,
     HttpClientModule,
     MaterialModule,
-    FormsModule,
+    RouterModule.forRoot(appRoutes),
     StoreModule.forRoot(reducers),
-    EffectsModule.forRoot(fromEffects.effects),
-    // StoreRouterConnectingModule.forRoot(),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
   ],
   providers: [
-    // { provide: RouterStateSerializer, useClass: CustomSerializer }
     { provide: MAT_DIALOG_DATA, useValue: {} },
     { provide: MatDialogRef, useValue: {} },
   ],

@@ -51,5 +51,53 @@ export class PoemsEffects {
       );
     })
   );
+
+  @Effect()
+  addPoemLike$ = this.actions.pipe(
+    ofType(fromActions.ADD_POEM_LIKE),
+    pluck('payload'),
+    switchMap((payload: any) => {
+      return of(this.poemsService.addLike(payload.poem, payload.user)).pipe(
+        map(() => new fromActions.AddPoemLikeSuccess()),
+        catchError(error => of(new fromActions.AddPoemLikeFail(error)))
+      );
+    })
+  );
+
+  @Effect()
+  removePoemLike$ = this.actions.pipe(
+    ofType(fromActions.REMOVE_POEM_LIKE),
+    pluck('payload'),
+    switchMap((payload: any) => {
+      return this.poemsService.removeLike(payload.poem, payload.user).pipe(
+        map(() => new fromActions.RemovePoemLikeSuccess()),
+        catchError(error => of(new fromActions.RemovePoemLikeFail(error)))
+      );
+    })
+  );
+
+  @Effect()
+  addPoemComment$ = this.actions.pipe(
+    ofType(fromActions.ADD_POEM_COMMENT),
+    pluck('payload'),
+    switchMap((payload: any) => {
+      return of(this.poemsService.addComment(payload.poem, payload.user, payload.comment)).pipe(
+        map(() => new fromActions.AddPoemCommentSuccess()),
+        catchError(error => of(new fromActions.AddPoemCommentFail(error)))
+      );
+    })
+  );
+
+  @Effect()
+  removePoemComment$ = this.actions.pipe(
+    ofType(fromActions.REMOVE_POEM_COMMENT),
+    pluck('payload'),
+    switchMap((comment: Comment) => {
+      return this.poemsService.deleteComment(comment).pipe(
+        map(() => new fromActions.RemovePoemCommentSuccess()),
+        catchError(error => of(new fromActions.RemovePoemCommentFail(error)))
+      );
+    })
+  );
 }
 
