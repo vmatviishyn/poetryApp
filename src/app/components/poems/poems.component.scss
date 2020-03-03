@@ -15,16 +15,21 @@
     width: 20%;
     cursor: pointer;
 
+    @media (min-width: 768px) and (max-width: 1024px) {
+      width: 30%;
+    }
+
     @media (max-width: 768px) {
       width: 100%;
     }
 
     &--photo {
-      padding: 0;
-      max-height: 350px;
-      object-fit: cover;
       border-top-left-radius: 10px 10px;
       border-top-right-radius: 10px 10px;
+      height: 250px;
+      max-height: 350px;
+      object-fit: cover;
+      padding: 0;
     }
 
     &--text {

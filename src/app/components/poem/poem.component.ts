@@ -83,8 +83,8 @@ export class PoemComponent implements OnInit, OnDestroy {
     this.router.navigate(['/poems']);
 
     this.poemsService.deletePoem(poem)
-    .pipe(take(1))
-    .subscribe(() => {
+      .pipe(take(1))
+      .subscribe(() => {
         this.storage.ref(poem.poemImagePath).delete();
         this.poemsService.deleteCommentByPoemId(poemId).pipe(take(1)).subscribe();
         this.poemsService.removeLikeByPoemId(poemId).pipe(take(1)).subscribe();
