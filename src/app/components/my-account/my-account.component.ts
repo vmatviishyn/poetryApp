@@ -1,15 +1,17 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 
 import { MatDialog } from '@angular/material/dialog';
 import { NewPoemComponent } from '../new-poem/new-poem.component';
+import { User } from '../../models/user.model';
 
 @Component({
   selector: 'app-my-account',
   templateUrl: './my-account.component.html',
-  styleUrls: ['./my-account.component.scss']
+  styleUrls: ['./my-account.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MyAccountComponent {
-  @Input() user: any;
+  @Input() user: User;
 
   @Output() login = new EventEmitter();
   @Output() logout = new EventEmitter();

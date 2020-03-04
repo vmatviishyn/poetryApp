@@ -21,6 +21,13 @@ import { TruncatePipe } from './pipes/truncate-pipe.pipe';
 import { NotificationsComponent } from './components/notifications/notifications.component';
 import { MyAccountComponent } from './components/my-account/my-account.component';
 
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+
+import { reducers } from './store/reducers';
+import * as fromEffects from './store/effects';
+
 const appRoutes: Routes = [
   { path: 'poem/:id', component: PoemComponent },
   {
@@ -31,32 +38,34 @@ const appRoutes: Routes = [
     redirectTo: '/poems',
     pathMatch: 'full'
   },
-  // { path: '**', component: PageNotFoundComponent }
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
-    NewPoemComponent,
-    PoemsComponent,
     FileUploadComponent,
-    TruncatePipe,
-    PoemComponent,
-    NavigationComponent,
-    NotificationsComponent,
     MyAccountComponent,
+    NavigationComponent,
+    NewPoemComponent,
+    NotificationsComponent,
+    PoemComponent,
+    PoemsComponent,
+    TruncatePipe,
   ],
   imports: [
-    RouterModule.forRoot(appRoutes),
     AngularFireAuthModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireStorageModule,
     AngularFirestoreModule,
     BrowserAnimationsModule,
     BrowserModule,
+    EffectsModule.forRoot(fromEffects.effects),
+    FormsModule,
     HttpClientModule,
     MaterialModule,
-    FormsModule,
+    RouterModule.forRoot(appRoutes),
+    StoreModule.forRoot(reducers),
+    !environment.production ? StoreDevtoolsModule.instrument() : [],
   ],
   providers: [
     { provide: MAT_DIALOG_DATA, useValue: {} },

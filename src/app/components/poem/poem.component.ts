@@ -1,12 +1,19 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { switchMap, take, takeUntil } from 'rxjs/operators';
-import { PoemsService } from 'src/app/services/poems.service';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+
+import { takeUntil } from 'rxjs/operators';
+import { Subject, Observable } from 'rxjs';
+
 import { NewPoemComponent } from '../new-poem/new-poem.component';
-import { AuthService } from 'src/app/services/auth.service';
-import { Subject } from 'rxjs';
-import { AngularFireStorage } from '@angular/fire/storage';
+
+import { Store } from '@ngrx/store';
+import * as fromStore from '../../store';
+
+import { Poem } from '../../models/poem.model';
+import { Like } from '../../models/like.model';
+import { Comment } from '../../models/comment.model';
+import { User } from '../../models/user.model';
 
 @Component({
   selector: 'app-poem',
@@ -14,59 +21,52 @@ import { AngularFireStorage } from '@angular/fire/storage';
   styleUrls: ['./poem.component.scss']
 })
 export class PoemComponent implements OnInit, OnDestroy {
-
-  poem: any = null;
-  user: any = null;
-  likes: any = [];
-  isPoemLiked: any;
-  comment: string = null;
-  comments: any = [];
-  isCommentsShown = false;
-
   private unsubscribe$ = new Subject<void>();
 
+  comments$: Observable<Comment[]>;
+
+  poem: Poem = null;
+  user: User = null;
+  likes: Like[] = [];
+  isPoemLiked: any;
+  comment: string = null;
+  isCommentsShown = false;
+
   constructor(
-    private route: ActivatedRoute,
-    private poemsService: PoemsService,
-    private router: Router,
-    private authService: AuthService,
-    private storage: AngularFireStorage,
     public dialog: MatDialog,
+    private route: ActivatedRoute,
+    private router: Router,
+    private store: Store<fromStore.AppState>,
   ) { }
 
   ngOnInit() {
-    this.route.paramMap.pipe(
-      switchMap((params: ParamMap) => this.poemsService.getPoem(params.get('id'))),
-      takeUntil(this.unsubscribe$)
-    ).subscribe((poem: any) => {
-      this.poem = poem;
-      this.getUser();
-      this.getLikes();
-      this.getComments();
-    });
-  }
+    this.store.dispatch(new fromStore.GetPoem(this.route.snapshot.params.id));
 
-  showAddComment() {
-    this.isCommentsShown = !this.isCommentsShown;
-  }
-
-  getLikes() {
-    this.poemsService.getLikes(this.poem.poemId)
+    this.store.select(fromStore.getActivePoemSelector)
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(likes => {
+      .subscribe((poem: Poem) => {
+        this.poem = poem;
+
+        if (this.poem) {
+          this.store.dispatch(new fromStore.GetPoemLikes(this.poem));
+          this.store.dispatch(new fromStore.GetPoemComments(this.poem));
+        }
+      });
+
+    this.store.select(fromStore.getUserSelector)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((user: User) => {
+        this.user = user;
+      });
+
+    this.store.select(fromStore.getLikesSelector)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((likes: Like[]) => {
         this.likes = likes;
-        this.isPoemLiked = this.likes.find(element => {
-          return element.userEmail === this.user.email && element.poemId === this.poem.poemId;
-        });
+        this.isPoemLiked = this.checkIsPoemLiked();
       });
-  }
 
-  getUser() {
-    this.authService.appUser$
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(appUser => {
-        this.user = appUser;
-      });
+    this.comments$ = this.store.select(fromStore.getCommentsSelector);
   }
 
   onEditPoem() {
@@ -77,54 +77,41 @@ export class PoemComponent implements OnInit, OnDestroy {
   }
 
   onDeletePoem(poem) {
-    const poemId = poem.poemId;
     this.router.navigate(['/poems']);
-
-    this.poemsService.deletePoem(poem)
-    .pipe(take(1))
-    .subscribe(() => {
-        this.storage.ref(poem.poemImagePath).delete();
-        this.poemsService.deleteCommentByPoemId(poemId).pipe(take(1)).subscribe();
-        this.poemsService.removeLikeByPoemId(poemId).pipe(take(1)).subscribe();
-      });
+    this.store.dispatch(new fromStore.RemovePoem(poem));
   }
 
-  onAddLike(poem, user) {
-    if (this.user && this.likes) {
-      this.isPoemLiked = this.likes.find(element => {
-        return element.userEmail === this.user.email && element.poemId === this.poem.poemId;
-      });
-
+  onAddLike(poem: Poem, user: User) {
+    if (user) {
       this.isPoemLiked
-        ? this.poemsService.removeLike(poem, user).pipe(take(1)).subscribe()
-        : this.poemsService.addLike(poem, user);
+        ? this.store.dispatch(new fromStore.RemovePoemLike({poem, user}))
+        : this.store.dispatch(new fromStore.AddPoemLike({poem, user}));
     }
   }
 
-  onAddComment(poem, user) {
-    if (this.user) {
-      this.poemsService.addComment(poem, user, this.comment);
+  showAddComment() {
+    this.isCommentsShown = !this.isCommentsShown;
+  }
+
+  onAddComment(poem: Poem, user: User) {
+    if (user) {
+      this.store.dispatch(new fromStore.AddPoemComment({ poem, user, comment: this.comment }));
       this.comment = '';
     }
   }
 
-  getComments() {
-    this.poemsService.getComments(this.poem.poemId)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(comments => {
-        this.comments = comments;
-      });
+  onDeleteComment(comment: Comment) {
+    this.store.dispatch(new fromStore.RemovePoemComment(comment));
   }
 
-  onDeleteComment(comment: any) {
-    this.poemsService.deleteComment(comment)
-      .pipe(take(1))
-      .subscribe();
+  checkIsPoemLiked() {
+    return this.likes.find((like: Like) => {
+      return like?.userEmail === this.user?.email && like?.poemId === this.poem?.poemId;
+    });
   }
 
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
-
 }

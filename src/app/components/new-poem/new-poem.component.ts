@@ -1,11 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { PoemsService } from 'src/app/services/poems.service';
 import { MatDialog } from '@angular/material/dialog';
 import { HashService } from 'src/app/services/hash.service';
-import { take } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import * as fromStore from '../../store';
 
 @Component({
   selector: 'app-new-poem',
@@ -19,7 +19,7 @@ export class NewPoemComponent implements OnInit {
   imageLoaded = true;
 
   constructor(
-    private poemsService: PoemsService,
+    private store: Store<fromStore.AppState>,
     private hashService: HashService,
     private snackbarService: SnackbarService,
     private router: Router,
@@ -42,18 +42,15 @@ export class NewPoemComponent implements OnInit {
       return;
     }
 
-    this.poemsService.addPoem({
+    this.store.dispatch(new fromStore.AddPoem({
       poemImagePath: this.imagePath,
       poemId,
       poemText: text,
       poemImage: this.selectedImage
-    })
-    .then(() => {
-      this.onAddNewPoemDialogClose();
-    })
-    .then(() => {
-      this.router.navigate(['/poem', poemId]);
-    });
+    }));
+
+    this.onAddNewPoemDialogClose();
+    this.router.navigate(['/poem', poemId]);
   }
 
   onEditPoem(text) {
@@ -65,16 +62,14 @@ export class NewPoemComponent implements OnInit {
       return;
     }
 
-    this.poemsService.editPoem({
+    this.store.dispatch(new fromStore.EditPoem({
       poemImagePath: this.imagePath || this.poemData.poemImagePath,
       poemId: this.poemData.poemId,
       poemText: text,
       poemImage: this.selectedImage || this.poemData.poemImage,
-    })
-    .pipe(take(1))
-    .subscribe(() => {
-      this.onAddNewPoemDialogClose();
-    });
+    }));
+
+    this.onAddNewPoemDialogClose();
   }
 
   onSavePoem(text) {

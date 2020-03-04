@@ -1,9 +1,9 @@
 <app-navigation
-  [user]="user"
-  [notifications]="notifications"
+  [user]="user$ | async"
+  [notifications]="notifications$ | async"
   (login)="onLogin()"
   (logout)="onLogout()"
-  (deleteAllNotifications)="onDeleteAllNotifications()"
+  (deleteAllNotifications)="onRemoveAllNotifications()"
   (notificationClick)="onNotificationClick($event)"
 ></app-navigation>
 

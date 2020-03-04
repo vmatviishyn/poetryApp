@@ -79,9 +79,9 @@ export class PoemsService {
       }));
   }
 
-  getLikes(poemId: string) {
+  getLikes(poem: any) {
     return this.afs.collection('likes', (ref: firebase.firestore.CollectionReference) => ref
-      .where('poemId', '==', poemId)).valueChanges();
+      .where('poemId', '==', poem.poemId)).valueChanges();
   }
 
   addComment(poem: any, userInfo: any, commentText: string) {
@@ -109,9 +109,9 @@ export class PoemsService {
     });
   }
 
-  getComments(poemId: string) {
+  getComments(poem: any) {
     return this.afs.collection('comments', (ref: firebase.firestore.CollectionReference) => ref
-      .where('poemId', '==', poemId)
+      .where('poemId', '==', poem.poemId)
       .orderBy('date', 'asc'))
       .valueChanges();
   }
