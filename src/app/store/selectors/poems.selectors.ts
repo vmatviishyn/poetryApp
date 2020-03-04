@@ -16,3 +16,8 @@ export const getCommentsSelector = createSelector(
   fromReducers.getPoemsState,
   (state: PoemsState) => state.comments
 );
+
+export const getActivePoemSelector = createSelector(
+  fromReducers.getPoemsState,
+  (state: PoemsState) => state.activePoem
+);

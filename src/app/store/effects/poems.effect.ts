@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Effect, Actions, ofType } from '@ngrx/effects';
+import { AngularFireStorage } from '@angular/fire/storage';
+
 import { map, switchMap, catchError, pluck } from 'rxjs/operators';
 import { of } from 'rxjs';
+
 import * as fromActions from '../actions';
 import { PoemsService } from '../../services/poems.service';
 
@@ -14,7 +17,8 @@ export class PoemsEffects {
 
   constructor(
     private actions: Actions,
-    private poemsService: PoemsService
+    private poemsService: PoemsService,
+    private storage: AngularFireStorage,
   ) { }
 
   @Effect()
@@ -26,6 +30,75 @@ export class PoemsEffects {
         catchError(error => of(new fromActions.GetPoemsFail(error)))
       );
     })
+  );
+
+  @Effect()
+  getPoem$ = this.actions.pipe(
+    ofType(fromActions.GET_POEM),
+    pluck('payload'),
+    switchMap((poemId: string) => {
+      return this.poemsService.getPoem(poemId).pipe(
+        map((poem: Poem) => new fromActions.GetPoemSuccess(poem)),
+        catchError(error => of(new fromActions.GetPoemFail(error)))
+      );
+    })
+  );
+
+  @Effect()
+  addPoem$ = this.actions.pipe(
+    ofType(fromActions.ADD_POEM),
+    pluck('payload'),
+    switchMap((poem: Poem) => {
+      return of(this.poemsService.addPoem(poem)).pipe(
+        map(() => new fromActions.AddPoemSuccess()),
+        catchError(error => of(new fromActions.AddPoemFail(error)))
+      );
+    })
+  );
+
+  @Effect()
+  editPoem$ = this.actions.pipe(
+    ofType(fromActions.EDIT_POEM),
+    pluck('payload'),
+    switchMap((poem: Poem) => {
+      return this.poemsService.editPoem(poem).pipe(
+        map(() => new fromActions.EditPoemSuccess()),
+        catchError(error => of(new fromActions.EditPoemFail(error)))
+      );
+    })
+  );
+
+  @Effect()
+  removePoem$ = this.actions.pipe(
+    ofType(fromActions.REMOVE_POEM),
+    pluck('payload'),
+    switchMap((poem: Poem) => {
+      return this.poemsService.deletePoem(poem).pipe(
+        map(() => new fromActions.RemovePoemSuccess(poem)),
+        catchError(error => of(new fromActions.RemovePoemFail(error)))
+      );
+    })
+  );
+
+  @Effect({ dispatch: false })
+  removeCommentsOnRemovePoemSuccess$ = this.actions.pipe(
+    ofType(fromActions.REMOVE_POEM_SUCCESS),
+    pluck('payload'),
+    map((poem: Poem) => this.poemsService.deleteCommentByPoemId(poem.poemId)),
+  );
+
+  @Effect({ dispatch: false })
+  removeLikesOnRemovePoemSuccess$ = this.actions.pipe(
+    ofType(fromActions.REMOVE_POEM_SUCCESS),
+    pluck('payload'),
+    map((poem: Poem) => this.poemsService.removeLikeByPoemId(poem.poemId)),
+  );
+
+  @Effect({ dispatch: false })
+  removePhotoOnRemovePoemSuccess$ = this.actions.pipe(
+    ofType(fromActions.REMOVE_POEM_SUCCESS),
+    pluck('payload'),
+    map((poem: Poem) => this.storage.ref(poem.poemImagePath).delete()),
   );
 
   @Effect()

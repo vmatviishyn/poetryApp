@@ -8,6 +8,22 @@ export const GET_POEMS = '[Poems] Get Poems';
 export const GET_POEMS_SUCCESS = '[Poems] Get Poems Success';
 export const GET_POEMS_FAIL = '[Poems] Get Poems Fail';
 
+export const GET_POEM = '[Poems] Get Poem';
+export const GET_POEM_SUCCESS = '[Poems] Get Poem Success';
+export const GET_POEM_FAIL = '[Poems] Get Poem Fail';
+
+export const ADD_POEM = '[Poems] Add Poem';
+export const ADD_POEM_SUCCESS = '[Poems] Add Poem Success';
+export const ADD_POEM_FAIL = '[Poems] Add Poem Fail';
+
+export const EDIT_POEM = '[Poems] Edit Poem';
+export const EDIT_POEM_SUCCESS = '[Poems] Edit Poem Success';
+export const EDIT_POEM_FAIL = '[Poems] Edit Poem Fail';
+
+export const REMOVE_POEM = '[Poems] Remove Poem';
+export const REMOVE_POEM_SUCCESS = '[Poems] Remove Poem Success';
+export const REMOVE_POEM_FAIL = '[Poems] Remove Poem Fail';
+
 export const GET_POEM_LIKES = '[Poems] Get Poem Likes';
 export const GET_POEM_LIKES_SUCCESS = '[Poems] Get Poem Likes Success';
 export const GET_POEM_LIKES_FAIL = '[Poems] Get Poem Likes Fail';
@@ -44,6 +60,62 @@ export class GetPoemsSuccess implements Action {
 export class GetPoemsFail implements Action {
   readonly type = GET_POEMS_FAIL;
   constructor(public payload: any) { }
+}
+
+// GET_POEM
+export class GetPoem implements Action {
+  readonly type = GET_POEM;
+  constructor(public payload?: any) { }
+}
+export class GetPoemSuccess implements Action {
+  readonly type = GET_POEM_SUCCESS;
+  constructor(public payload?: Poem) { }
+}
+export class GetPoemFail implements Action {
+  readonly type = GET_POEM_FAIL;
+  constructor(public payload?: any) { }
+}
+
+// ADD_POEM
+export class AddPoem implements Action {
+  readonly type = ADD_POEM;
+  constructor(public payload?: any) { }
+}
+export class AddPoemSuccess implements Action {
+  readonly type = ADD_POEM_SUCCESS;
+  constructor(public payload?: Poem) { }
+}
+export class AddPoemFail implements Action {
+  readonly type = ADD_POEM_FAIL;
+  constructor(public payload?: any) { }
+}
+
+// EDIT_POEM
+export class EditPoem implements Action {
+  readonly type = EDIT_POEM;
+  constructor(public payload?: any) { }
+}
+export class EditPoemSuccess implements Action {
+  readonly type = EDIT_POEM_SUCCESS;
+  constructor(public payload?: Poem) { }
+}
+export class EditPoemFail implements Action {
+  readonly type = EDIT_POEM_FAIL;
+  constructor(public payload?: any) { }
+}
+
+// REMOVE_POEM
+export class RemovePoem implements Action {
+  readonly type = REMOVE_POEM;
+  constructor(public payload?: any) { }
+}
+export class RemovePoemSuccess implements Action {
+  readonly type = REMOVE_POEM_SUCCESS;
+  constructor(public payload?: any) { }
+}
+export class RemovePoemFail implements Action {
+  readonly type = REMOVE_POEM_FAIL;
+  constructor(public payload?: any) { }
 }
 
 // GET_POEM_LIKES
@@ -134,6 +206,22 @@ export type PoemsAction =
   | GetPoems
   | GetPoemsSuccess
   | GetPoemsFail
+
+  | GetPoem
+  | GetPoemSuccess
+  | GetPoemFail
+
+  | AddPoem
+  | AddPoemSuccess
+  | AddPoemFail
+
+  | EditPoem
+  | EditPoemSuccess
+  | EditPoemFail
+
+  | RemovePoem
+  | RemovePoemSuccess
+  | RemovePoemFail
 
   | GetPoemLikes
   | GetPoemLikesSuccess

@@ -1,12 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { AngularFireStorage } from '@angular/fire/storage';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
-import { switchMap, take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { Subject, Observable } from 'rxjs';
-
-import { PoemsService } from 'src/app/services/poems.service';
 
 import { NewPoemComponent } from '../new-poem/new-poem.component';
 
@@ -38,22 +35,23 @@ export class PoemComponent implements OnInit, OnDestroy {
   constructor(
     public dialog: MatDialog,
     private route: ActivatedRoute,
-    private poemsService: PoemsService,
     private router: Router,
-    private storage: AngularFireStorage,
     private store: Store<fromStore.AppState>,
   ) { }
 
   ngOnInit() {
-    this.route.paramMap.pipe(
-      switchMap((params: ParamMap) => this.poemsService.getPoem(params.get('id'))),
-      takeUntil(this.unsubscribe$)
-    ).subscribe((poem: any) => {
-      this.poem = poem;
+    this.store.dispatch(new fromStore.GetPoem(this.route.snapshot.params.id));
 
-      this.store.dispatch(new fromStore.GetPoemLikes(this.poem));
-      this.store.dispatch(new fromStore.GetPoemComments(this.poem));
-    });
+    this.store.select(fromStore.getActivePoemSelector)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((poem: Poem) => {
+        this.poem = poem;
+
+        if (this.poem) {
+          this.store.dispatch(new fromStore.GetPoemLikes(this.poem));
+          this.store.dispatch(new fromStore.GetPoemComments(this.poem));
+        }
+      });
 
     this.store.select(fromStore.getUserSelector)
       .pipe(takeUntil(this.unsubscribe$))
@@ -79,16 +77,8 @@ export class PoemComponent implements OnInit, OnDestroy {
   }
 
   onDeletePoem(poem) {
-    const poemId = poem.poemId;
     this.router.navigate(['/poems']);
-
-    this.poemsService.deletePoem(poem)
-      .pipe(take(1))
-      .subscribe(() => {
-        this.storage.ref(poem.poemImagePath).delete();
-        this.poemsService.deleteCommentByPoemId(poemId).pipe(take(1)).subscribe();
-        this.poemsService.removeLikeByPoemId(poemId).pipe(take(1)).subscribe();
-      });
+    this.store.dispatch(new fromStore.RemovePoem(poem));
   }
 
   onAddLike(poem: Poem, user: User) {

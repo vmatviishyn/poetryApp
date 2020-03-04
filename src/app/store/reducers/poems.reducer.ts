@@ -5,6 +5,7 @@ import * as fromActions from '../actions';
 
 export interface PoemsState {
   poems: Poem[] | [];
+  activePoem: Poem | {};
   likes: Like[] | [];
   comments: Comment[] | [];
   loaded: boolean;
@@ -13,6 +14,7 @@ export interface PoemsState {
 
 export const initialState: PoemsState = {
   poems: [],
+  activePoem: null,
   likes: [],
   comments: [],
   loaded: false,
@@ -39,6 +41,28 @@ export function reducer(state = initialState, action: fromActions.PoemsAction): 
       };
     }
     case fromActions.GET_POEMS_FAIL: {
+      return {
+        ...state,
+        loading: false,
+        loaded: false,
+      };
+    }
+
+    case fromActions.GET_POEM: {
+      return {
+        ...state,
+        loading: true,
+      };
+    }
+    case fromActions.GET_POEM_SUCCESS: {
+      return {
+        ...state,
+        loading: false,
+        loaded: true,
+        activePoem: action.payload
+      };
+    }
+    case fromActions.GET_POEM_FAIL: {
       return {
         ...state,
         loading: false,
@@ -87,30 +111,6 @@ export function reducer(state = initialState, action: fromActions.PoemsAction): 
       };
     }
     case fromActions.GET_POEM_COMMENTS_FAIL: {
-      return {
-        ...state,
-        loading: false,
-        loaded: false,
-      };
-    }
-
-    case fromActions.REMOVE_POEM_LIKE:
-    case fromActions.ADD_POEM_LIKE: {
-      return {
-        ...state,
-        loading: true,
-      };
-    }
-    case fromActions.REMOVE_POEM_LIKE:
-    case fromActions.ADD_POEM_LIKE_SUCCESS: {
-      return {
-        ...state,
-        loading: false,
-        loaded: true,
-      };
-    }
-    case fromActions.REMOVE_POEM_LIKE:
-    case fromActions.ADD_POEM_LIKE_FAIL: {
       return {
         ...state,
         loading: false,
