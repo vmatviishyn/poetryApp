@@ -15,6 +15,8 @@ import { Like } from '../../models/like.model';
 import { Comment } from '../../models/comment.model';
 import { User } from '../../models/user.model';
 
+import { SnackbarService } from '../../services/snackbar.service';
+
 @Component({
   selector: 'app-poem',
   templateUrl: './poem.component.html',
@@ -34,6 +36,7 @@ export class PoemComponent implements OnInit, OnDestroy {
 
   constructor(
     public dialog: MatDialog,
+    private snackbarService: SnackbarService,
     private route: ActivatedRoute,
     private router: Router,
     private store: Store<fromStore.AppState>,
@@ -86,6 +89,8 @@ export class PoemComponent implements OnInit, OnDestroy {
       this.isPoemLiked
         ? this.store.dispatch(new fromStore.RemovePoemLike({poem, user}))
         : this.store.dispatch(new fromStore.AddPoemLike({poem, user}));
+    } else {
+      this.snackbarService.showSnackbar('Please login to add likes!');
     }
   }
 
@@ -97,6 +102,8 @@ export class PoemComponent implements OnInit, OnDestroy {
     if (user) {
       this.store.dispatch(new fromStore.AddPoemComment({ poem, user, comment: this.comment }));
       this.comment = '';
+    } else {
+      this.snackbarService.showSnackbar('Please login to add comments!');
     }
   }
 
