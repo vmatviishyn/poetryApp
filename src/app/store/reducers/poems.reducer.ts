@@ -52,6 +52,7 @@ export function reducer(state = initialState, action: fromActions.PoemsAction): 
       return {
         ...state,
         loading: true,
+        activePoem: null
       };
     }
     case fromActions.GET_POEM_SUCCESS: {

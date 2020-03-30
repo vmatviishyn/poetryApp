@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
-import { takeUntil } from 'rxjs/operators';
-import { Subject, Observable } from 'rxjs';
+import { takeUntil, switchMap } from 'rxjs/operators';
+import { Subject, Observable, of } from 'rxjs';
 
 import { NewPoemComponent } from '../new-poem/new-poem.component';
 
@@ -27,6 +27,8 @@ export class PoemComponent implements OnInit, OnDestroy {
 
   comments$: Observable<Comment[]>;
 
+  poemId;
+
   poem: Poem = null;
   user: User = null;
   likes: Like[] = [];
@@ -43,7 +45,10 @@ export class PoemComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.store.dispatch(new fromStore.GetPoem(this.route.snapshot.params.id));
+    this.route.paramMap.pipe(
+      switchMap((params: ParamMap) => of(this.store.dispatch(new fromStore.GetPoem(params.get('id'))))),
+      takeUntil(this.unsubscribe$)
+    ).subscribe();
 
     this.store.select(fromStore.getActivePoemSelector)
       .pipe(takeUntil(this.unsubscribe$))
